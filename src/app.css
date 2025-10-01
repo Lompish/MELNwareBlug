@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+@theme {
+  /* Bas/typografi */
+  --color-bg: var(--ctp-base);
+  --color-foreground: var(--ctp-text);
+  --color-muted: var(--ctp-surface0);
+  --color-muted-foreground: var(--ctp-subtext0);
+  --color-card: var(--ctp-mantle);
+  --color-card-foreground: var(--ctp-text);
+  --color-popover: var(--ctp-crust);
+  --color-popover-foreground: var(--ctp-text);
+  --color-border: var(--ctp-overlay0);
+  --color-input: var(--ctp-overlay0);
+  --color-ring: var(--ctp-blue);
+
+  /* Brand + states (används direkt som t.ex. bg-primary-hover) */
+  --color-primary: var(--ctp-blue);
+  --color-primary-foreground: var(--fg-on-primary, #ffffff);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+
+  --color-secondary: var(--ctp-mauve);
+  --color-secondary-foreground: var(--fg-on-secondary, #0b0c10);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-active: var(--secondary-active);
+
+  --color-accent: var(--ctp-teal);
+  --color-accent-foreground: var(--fg-on-accent, #0b0c10);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+
+  /* Status */
+  --color-success: var(--ctp-green);
+  --color-success-foreground: #0b0c10;
+  --color-success-hover: var(--success-hover);
+  --color-success-active: var(--success-active);
+
+  --color-warning: var(--ctp-peach);
+  --color-warning-foreground: #0b0c10;
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-active: var(--warning-active);
+
+  --color-destructive: var(--ctp-red);
+  --color-destructive-foreground: #ffffff;
+  --color-destructive-hover: var(--destructive-hover);
+  --color-destructive-active: var(--destructive-active);
+
+  --color-info: var(--ctp-sapphire);
+  --color-info-foreground: #0b0c10;
+
+  --color-link: var(--ctp-blue);
+  --color-link-hover: var(--primary-hover);
+
+  /* Radier (kan användas med rounded-[--radius-xl]) */
+  --radius-xl: 0.8rem;
+  --radius-2xl: 1rem;
+}
+
+/* LATTE (LJUS) */
+:root[data-theme="latte"] {
+  /* Catppuccin Latte */
+  --ctp-rosewater:#dc8a78; --ctp-flamingo:#dd7878; --ctp-pink:#ea76cb; --ctp-mauve:#8839ef;
+  --ctp-red:#d20f39; --ctp-maroon:#e64553; --ctp-peach:#fe640b; --ctp-yellow:#df8e1d;
+  --ctp-green:#40a02b; --ctp-teal:#179299; --ctp-sky:#04a5e5; --ctp-sapphire:#209fb5;
+  --ctp-blue:#1e66f5; --ctp-lavender:#7287fd;
+  --ctp-text:#4c4f69; --ctp-subtext1:#5c5f77; --ctp-subtext0:#6c6f85;
+  --ctp-overlay2:#7c7f93; --ctp-overlay1:#8c8fa1; --ctp-overlay0:#9ca0b0;
+  --ctp-surface2:#acb0be; --ctp-surface1:#bcc0cc; --ctp-surface0:#ccd0da;
+  --ctp-base:#eff1f5; --ctp-mantle:#e6e9ef; --ctp-crust:#dce0e8;
+
+  /* Semantiska finjusteringar */
+  --fg-on-primary: #ffffff;
+  --fg-on-secondary: #ffffff;
+  --fg-on-accent: #0b0c10;
+
+  /* States (tillåtna som egna färg-tokens i Tailwind) */
+  --primary-hover: #1b5ae0;
+  --primary-active: #174dc4;
+  --secondary-hover: #7a2ee6;
+  --secondary-active: #6a26ca;
+  --accent-hover: #128e86;
+  --accent-active: #0f7b74;
+  --success-hover: #389026;
+  --success-active: #307d21;
+  --warning-hover: #e65a07;
+  --warning-active: #c94e06;
+  --destructive-hover: #c41434;
+  --destructive-active: #a90f2c;
+
+  color-scheme: light;
+}
+
+/* MOCHA (MÖRK) */
+:root[data-theme="mocha"] {
+  /* Catppuccin Mocha */
+  --ctp-rosewater:#f5e0dc; --ctp-flamingo:#f2cdcd; --ctp-pink:#f5c2e7; --ctp-mauve:#cba6f7;
+  --ctp-red:#f38ba8; --ctp-maroon:#eba0ac; --ctp-peach:#fab387; --ctp-yellow:#f9e2af;
+  --ctp-green:#a6e3a1; --ctp-teal:#94e2d5; --ctp-sky:#89dceb; --ctp-sapphire:#74c7ec;
+  --ctp-blue:#89b4fa; --ctp-lavender:#b4befe;
+  --ctp-text:#cdd6f4; --ctp-subtext1:#bac2de; --ctp-subtext0:#a6adc8;
+  --ctp-overlay2:#9399b2; --ctp-overlay1:#7f849c; --ctp-overlay0:#6c7086;
+  --ctp-surface2:#585b70; --ctp-surface1:#45475a; --ctp-surface0:#313244;
+  --ctp-base:#1e1e2e; --ctp-mantle:#181825; --ctp-crust:#11111b;
+
+  /* Semantiska finjusteringar */
+  --fg-on-primary: #0b0c10;
+  --fg-on-secondary: #0b0c10;
+  --fg-on-accent: #0b0c10;
+
+  --primary-hover: #7aa8f8;
+  --primary-active: #6b9cf6;
+  --secondary-hover: #b893f5;
+  --secondary-active: #aa82f3;
+  --accent-hover: #84d7cd;
+  --accent-active: #76cdc2;
+  --success-hover: #92d594;
+  --success-active: #86cb88;
+  --warning-hover: #f3a86d;
+  --warning-active: #ef9a57;
+  --destructive-hover: #e07d97;
+  --destructive-active: #cc6e86;
+
+  color-scheme: dark;
+}
+
+/* Baslayout */
+html, body { height: 100%; }
+body { background: var(--color-bg); color: var(--color-foreground); }
+
+/* Buttons */
+@utility btn {
+  @apply inline-flex items-center gap-2 px-4 py-2 font-medium rounded-[--radius-xl]
+          border border-border shadow-sm transition
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+          disabled:opacity-60 disabled:cursor-not-allowed;
+}
+@utility btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active;
+}
+@utility btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active;
+}
+@utility btn-accent {
+  @apply bg-accent text-accent-foreground hover:bg-accent-hover active:bg-accent-active;
+}
+@utility btn-outline {
+  @apply bg-transparent text-foreground border-border hover:bg-muted;
+}
+@utility btn-danger {
+  @apply bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active;
+}
+@utility btn-success {
+  @apply bg-success text-success-foreground hover:bg-success-hover active:bg-success-active;
+}
+@utility btn-warning {
+  @apply bg-warning text-warning-foreground hover:bg-warning-hover active:bg-warning-active;
+}
+
+/* Links */
+@utility link {
+  @apply text-link underline-offset-2 hover:text-link-hover hover:underline;
+}
+
+/* Cards / surfaces */
+@utility card {
+  @apply bg-card text-card-foreground border border-border rounded-[--radius-2xl] p-4 shadow;
+}
+@utility muted {
+  @apply bg-muted text-muted-foreground;
+}
