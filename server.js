@@ -21,7 +21,7 @@ const database = await mysql.createConnection({
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE
-}) 
+})
 
 // Skapar ett express-objekt.
 const app = express()
@@ -31,7 +31,11 @@ const port = 3000
 // En middleware som låter oss hantera json-data i våra request.
 app.use(express.json())
 
-//Lägger till session i vårt rest-api. 
+//Lägger till session i vårt rest-api.
+// lägg till i env + salt, saltprocessen inte är en hårdkodad textfil
+// man kan bygga en process som gör att saltet blir unikt för varje användare
+// börja med att lägga in saltet i env!
+// vi vill helst inte ha ett statiskt salt
 app.use(session({
     secret: "min-hemlighet",
     resave: false,
@@ -41,6 +45,31 @@ app.use(session({
 // access control list middleware
 app.use(acl)
 
+app.get("/api/forums", async (request, response) => {
+
+    return response.json([
+        {
+            "id": 1,
+            "name": "Sport",
+            "amount_of_threads": 2
+        },
+        {
+            "id": 2,
+            "name": "Spel",
+            "amount_of_threads": 4
+        },
+        {
+            "id": 3,
+            "name": "Musik",
+            "amount_of_threads": 2
+        }
+    ])
+})
+app.get("/api/threads", async (request, response) => {
+
+    return response.json([])
+})
+
 // En endpoint som hämtar data från product-tabellen i databasen - gå till http://localhost:3000/products
 app.get("/api/products", async (request, response) => {
     const [result] = await database.execute("SELECT * FROM products")
@@ -49,51 +78,51 @@ app.get("/api/products", async (request, response) => {
 
 // En endpoint lägger till en ny produkt i product-tabellen - I Postman, POST - http://localhost:3000/products
 app.post("/api/products", async (request, response) => {
-    const {name, price} = request.body
+    const { name, price } = request.body
 
     try {
         const [result] = await database.execute("INSERT INTO products (name, price) VALUES (?, ?)",
             [name, price])
-        
+
         return response.status(201).json(result)
     } catch (error) {
-        return response.status(409).json({message: "Server error."})
+        return response.status(409).json({ message: "Server error." })
     }
 })
 
 // Kollar om någon är inloggad
 app.get("/api/login", async (request, response) => {
-    if (request.session.user){
+    if (request.session.user) {
         return response.status(200).json({
             username: request.session.user.username
-        }) 
+        })
     } else {
-           return response.status(200).json({
+        return response.status(200).json({
             message: "Ingen är inloggad."
-        })  
+        })
     }
 })
 
 // Logga in
 app.post("/api/login", async (request, response) => {
-    if(request.session.user){
+    if (request.session.user) {
         return response.status(404).json({
             message: "Någon annan är redan inloggad."
         })
     } else {
-        const {username, password} = request.body
+        const { username, password } = request.body
         let result = null
 
-        try{
-            [result] = await database.execute("SELECT * FROM users WHERE name = ? AND password = ?", 
+        try {
+            [result] = await database.execute("SELECT * FROM users WHERE name = ? AND password = ?",
                 [username, hash(password)])
-        } catch (e){
+        } catch (e) {
             console.log(e)
         }
 
         result = result[0]
 
-        if(!result){
+        if (!result) {
             return response.status(404).json({
                 message: "No user found! Wrong username or password."
             })
@@ -108,20 +137,20 @@ app.post("/api/login", async (request, response) => {
                 message: `Välkommen ${request.session.user.username}!`
             })
         }
- 
+
     }
-    
+
 })
 
 // Logga ut 
 app.delete("/api/login", async (request, response) => {
-    if(!request.session.user) {
+    if (!request.session.user) {
         return response.status(404).json({
             message: "Ingen är inloggad."
         })
     } else {
         request.session.destroy((err) => {
-            if(err) {
+            if (err) {
                 console.log(err)
                 return response.status(500).json({
                     message: "Något blev fel när du skulle logga ut"
@@ -138,18 +167,19 @@ app.delete("/api/login", async (request, response) => {
 
 // Lägg till en ny användare (user registration)
 app.post("/api/users", async (request, response) => {
-    const {username, password} = request.body
+    const { username, password } = request.body
 
     try {
         const [result] = await database.execute("INSERT INTO users (name, password, role) VALUES (?, ?, ?)",
             [username, hash(password), 'user'])
-        
+
         return response.status(201).json(result)
     } catch (error) {
         console.log(error)
-        return response.status(409).json({message: "Server error."})
+        return response.status(409).json({ message: "Server error." })
     }
 })
+app.use(express.static("./server/dist"))
 
 // Startar servern när vi kör server.js-filen.
-app.listen(port, () => { console.log(`http://localhost:${port}`)})
+app.listen(port, () => { console.log(`http://localhost:${port}`) })
