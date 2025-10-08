@@ -14,34 +14,6 @@
     ]
   },
   {
-    "url": "/api/forums",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/threads",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
     "url": "/api/login",
     "accesses": [
       {
@@ -55,15 +27,86 @@
       },
       {
         "roles": [
-          "user",
-          "admin",
-          "superadmin"
+          "*"
         ],
         "methods": [
           "DELETE",
           "GET"
         ],
         "description": "User logout and get user object"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View all public forums"
+      },
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a new forum"
+      }
+    ]
+  },
+  {
+    "url": "/api/threads",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View all threads"
+      },
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "POST",
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Create, edit or delete threads"
+      }
+    ]
+  },
+  {
+    "url": "/api/posts",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View all posts"
+      },
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "POST",
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Create, edit or delete your own posts"
       }
     ]
   },
