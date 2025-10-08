@@ -6,6 +6,9 @@ import user from "./endpointUser.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
+import hash from "./encryption.js";
+import updateUser from './endpointPatchUpdateUser.js'; // ← Lägg till denna
+
 
 //////import { readFileSync } from "fs"
 
@@ -24,6 +27,7 @@ export default function (server, database) {
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
+  updateUser(server, path, database, hash);
 
 }
 
