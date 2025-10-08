@@ -3,6 +3,8 @@ import login from "./endpointLogin.js";
 import forum from "./endpointForum.js";
 import thread from "./endpointThread.js";
 import user from "./endpointUser.js";
+//import threadByTitle from "./endpointThreadByTitle.js";
+import userId from "./endpointGetUserId.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
@@ -21,6 +23,8 @@ export default function (server, database) {
   user(server, path, database)
   forum(server, path, database)
   thread(server, path, database)
+  //threadByTitle(server, path, database)
+  userId(server, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
