@@ -21,23 +21,12 @@
           "*"
         ],
         "methods": [
-          "GET"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums/:id",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
+          "GET",
+          "POST",
+          "PUT",
           "DELETE"
         ],
-        "description": "Delete a forum by ID"
+        "description": "User registration"
       }
     ]
   },

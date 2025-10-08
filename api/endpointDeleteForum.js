@@ -1,6 +1,6 @@
-export default function deleteForum(app, acl, path, database) {
+export default function deleteForum(app, path, database) {
 
-  app.delete(`api/forums/:id`, async (request, response) => {
+  app.delete(`/api/forums/:id`, async (request, response) => {
     const forumId = request.params.id;
     try {
       const [result] = await database.execute('DELETE FROM forum WHERE id = ?', [forumId]);
