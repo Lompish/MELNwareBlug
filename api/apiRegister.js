@@ -6,7 +6,7 @@ import user from "./endpointUser.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
-
+import userByUsername from "./endpointGetUserByUsername.js";
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -24,6 +24,6 @@ export default function (server, database) {
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
-
+  userByUsername(server, path, database);
 }
 
