@@ -1,4 +1,4 @@
-export default function thread(app, acl, path, database) {
+export default function thread(app, path, database) {
   app.get(`${path}/threads`, async (request, response) => {
     return response.json([])
   })
