@@ -1,7 +1,10 @@
-export default function forumId(app, path, database) {
+export default function forumId(app, database) {
   // Hämta forum med id
   app.get(`/api/forums/by-id/:id`, async (request, response) => {
     const forumId = request.params.id;
+
+    // const [result] = await database.execute("SELECT * FROM products")
+    // return response.json(result)
 
     try {
       const [forum] = await database.execute(
@@ -25,3 +28,4 @@ export default function forumId(app, path, database) {
     }
   });
 }
+
