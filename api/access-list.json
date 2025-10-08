@@ -28,6 +28,20 @@
     ]
   },
   {
+    "url": "/api/forums/by-id/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "User registration"
+      }
+    ]
+  },
+  {
     "url": "/api/threads",
     "accesses": [
       {
