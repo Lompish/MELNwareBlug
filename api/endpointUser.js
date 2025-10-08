@@ -3,19 +3,20 @@ import hash from "./encryption.js"
 export default function user(app, acl, path, database) {
   // Lägg till en ny användare (user registration)
   app.post(`${path}/users`, async (request, response) => {
-    const { username, password } = request.body
+    const { username, password, email } = request.body
 
     // Validering
-    if (!username || !password) {
+    if (!username || !password || !email) {
       return response.status(400).json({
-        message: "Username and password are required."
+        message: "Username, password, and email are required."
       })
     }
 
+
     try {
       const [result] = await database.execute(
-        "INSERT INTO users (name, password, role) VALUES (?, ?, ?)",
-        [username, hash(password), 'user']
+        "INSERT INTO user (username, password, email) VALUES (?, ?, ?)",
+        [username, hash(password), email]
       )
 
       return response.status(201).json({
