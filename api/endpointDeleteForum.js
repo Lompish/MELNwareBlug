@@ -14,3 +14,6 @@ export default function deleteForum(app, path, database) {
     }
   })
 }
+
+// ta bort trådar i forumet
+// ta bort moderatorer i forumet?
