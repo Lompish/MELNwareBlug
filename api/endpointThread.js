@@ -20,22 +20,32 @@ export default function threads(app, acl, path, database) {
       if (forums.length === 0) {
         return response.status(404).json({ message: "Forum not found." });
       }
+
+      // Create thread
       const [result] = await database.execute(
         `INSERT INTO thread (forumId, threadName, threadDescription, isPrivate, isBlocked)
    VALUES (?, ?, ?, ?, 0)`,
         [forumId, threadName, threadDescription || null, isPrivate ? 1 : 0]
       );
 
-        return response.status(201).json({
-          message: "Thread created successfully.",
-          threadId: result.insertId
-        })
-      } catch (error) {
-        console.log(error)
+      const threadId = result.insertId;
+      // Add user to the threadModerator table as creator(isCreator)
+      const [modResult] = await database.execute(
+        `INSERT INTO threadModerator (userId, threadId, isCreator)
+   VALUES (?, ?, 1)`,
+        [user.id, threadId]
+      )
 
-        return response.status(500).json({
-          message: "Server error."
-        })
-      }
-    })
+      return response.status(201).json({
+        message: "Thread created successfully.",
+        threadId: result.insertId
+      })
+    } catch (error) {
+      console.log(error)
+
+      return response.status(500).json({
+        message: "Server error."
+      })
+    }
+  })
 }
