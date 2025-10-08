@@ -119,19 +119,28 @@ export default function threads(app, acl, path, database) {
   })
 
   // DELETE THREAD
-  app.delete(`${path}/threads/:id`, async (request, response) => {
+  app.delete(`${path}/threads/:forumId/:threadId`, async (request, response) => {
     const user = request.session.user
-    const threadId = request.params.id
+    const { forumId, threadId } = request.params
 
     if (!user) {
       return response.status(401).json({ message: "You must be logged in to delete a thread." })
     }
 
     try {
-      const [threads] = await database.execute(`SELECT * FROM thread WHERE id = ?`, [threadId])
+      // Check if thread exists
+      const [threads] = await database.execute(
+        `SELECT * FROM thread WHERE id = ?`,
+        [threadId]
+      )
 
       if (threads.length === 0) {
         return response.status(404).json({ message: "Thread not found." })
+      }
+
+      // Check thread is in right forum
+      if (threads[0].forumId != forumId) {
+        return response.status(404).json({ message: "Thread does not belong to this forum." })
       }
 
       const [threadCreators] = await database.execute(
