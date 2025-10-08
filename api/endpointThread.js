@@ -143,7 +143,10 @@ export default function threads(app, acl, path, database) {
         return response.status(403).json({ message: "Only the thread creator can delete the thread." })
       }
 
-      // Delete thread moderators first so we can delete thread
+      // Delete thread posts so we can delete thread
+      await database.execute(`DELETE FROM post WHERE threadId = ?`, [threadId])
+
+      // Delete thread moderators so we can delete thread
       await database.execute(`DELETE FROM threadModerator WHERE threadId = ?`, [threadId])
 
       // Delete thread
