@@ -22,9 +22,6 @@ export default function forum(app, path, database) {
   // Generera slugs
   forums.forEach(f => f.slug = createSlug(f.name));
 
-  // ----------------------
-  // Routes (ordning är viktig!)
-  // ----------------------
 
   // Alla forum
   app.get(`${path}/forums`, (req, res) => res.json(forums));
@@ -45,7 +42,7 @@ export default function forum(app, path, database) {
     res.json(forum);
   });
 
-  // By-ID (generisk route sist)
+  
   app.get(`${path}/forums/:id`, (req, res) => {
     const id = parseInt(req.params.id);
     const forum = forums.find(f => f.id === id);
