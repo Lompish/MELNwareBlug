@@ -27,7 +27,7 @@ export default function login(app, acl, path, database) {
 
     try {
       const [result] = await database.execute(
-        "SELECT * FROM users WHERE name = ? AND password = ?",
+        "SELECT * FROM user WHERE username = ? AND password = ?",
         [username, hash(password)]
       )
 
@@ -41,8 +41,7 @@ export default function login(app, acl, path, database) {
 
       request.session.user = {
         id: user.id,
-        username: user.name,
-        role: user.role
+        username: user.username
       }
 
       return response.status(200).json({

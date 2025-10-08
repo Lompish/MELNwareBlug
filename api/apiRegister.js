@@ -5,7 +5,7 @@ import thread from "./endpointThread.js";
 import user from "./endpointUser.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
-
+import deleteThread from "./endpointDeleteThread.js";
 
 //////import { readFileSync } from "fs"
 
@@ -21,6 +21,7 @@ export default function (server, database) {
   user(server, acl, path, database)
   forum(server, acl, path, database)
   thread(server, acl, path, database)
+  deleteThread(server, acl, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
