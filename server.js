@@ -4,7 +4,7 @@ import mysql from 'mysql2/promise';
 import session from "express-session";
 import apiRegister from "./api/apiRegister.js";
 import 'dotenv/config';
-import acl from "./api/acl.js";
+//import acl from "./api/acl.js";
 
 
 // Databas konfiguration.
@@ -36,7 +36,7 @@ app.use(session({
 }))
 
 // access control list middleware
-app.use(acl)
+//app.use(acl)
 
 
 // Registrerar alla våra endpoints i api-mappen.

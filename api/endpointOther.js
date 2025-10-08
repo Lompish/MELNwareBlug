@@ -1,4 +1,4 @@
-export default function other(app, acl, path, database) {
+export default function other(app, path, database) {
 
   // En endpoint som hämtar data från product-tabellen i databasen - gå till http://localhost:3000/products
   app.get("/api/products", async (request, response) => {

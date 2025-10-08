@@ -1,4 +1,4 @@
-export default function forum(app, acl, path, database) {
+export default function forum(app, path, database) {
 
   app.get(`${path}/forums`, async (request, response) => {
     return response.json([

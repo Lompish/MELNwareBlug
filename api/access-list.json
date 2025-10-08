@@ -37,7 +37,7 @@
         "methods": [
           "GET"
         ],
-        "description": "User registration"
+        "description": "Threads"
       }
     ]
   },

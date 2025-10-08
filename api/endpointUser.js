@@ -1,6 +1,6 @@
 import hash from "./encryption.js"
 
-export default function user(app, acl, path, database) {
+export default function user(app, path, database) {
   // Lägg till en ny användare (user registration)
   app.post(`${path}/users`, async (request, response) => {
     const { username, password } = request.body
