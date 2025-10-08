@@ -21,9 +21,10 @@
           "*"
         ],
         "methods": [
-          "GET"
+          "GET",
+          "POST"
         ],
-        "description": "User registration"
+        "description": "Post forum and get all forums"
       }
     ]
   },
