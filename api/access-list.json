@@ -28,6 +28,20 @@
     ]
   },
   {
+    "url": "/api/forums/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Delete a forum by ID"
+      }
+    ]
+  },
+  {
     "url": "/api/threads",
     "accesses": [
       {
