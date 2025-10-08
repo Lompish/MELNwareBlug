@@ -1,5 +1,4 @@
-
-export default function threads(app, acl, path, database) {
+export default function threadByTitle(app, path, database) {
   // Get threads by title
   app.get(`${path}/threads/by-title/:title`, async (request, response) => {
     const user = request.session.user;
@@ -24,14 +23,14 @@ export default function threads(app, acl, path, database) {
             t.threadName,
             t.threadDescription,
             t.isPrivate,
-            t.createDate,
+            t.creationDate,
             t.isBlocked
           FROM thread t
           LEFT JOIN threadModerator tm ON t.id = tm.threadId AND tm.userId = ?
           WHERE t.threadName LIKE ? 
             AND t.isBlocked = 0
             AND (t.isPrivate = 0 OR (t.isPrivate = 1 AND tm.userId IS NOT NULL))
-          ORDER BY t.createDate DESC`;
+          ORDER BY t.creationDate DESC`;
         params = [user.id, `%${title}%`];
       } else {
         // Not logged in: only show public threads
@@ -42,16 +41,17 @@ export default function threads(app, acl, path, database) {
             threadName,
             threadDescription,
             isPrivate,
-            createDate,
+            creationDate,
             isBlocked
           FROM thread
           WHERE threadName LIKE ? 
             AND isBlocked = 0
             AND isPrivate = 0
-          ORDER BY createDate DESC`;
+          ORDER BY creationDate DESC`;
         params = [`%${title}%`];
       }
 
+      //SÄKERT - Prepared statement med parametrar
       const [threads] = await database.execute(query, params);
 
       return response.status(200).json({
