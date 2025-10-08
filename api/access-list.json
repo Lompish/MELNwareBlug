@@ -3,40 +3,8 @@
     "url": "/api/users",
     "accesses": [
       {
-        "roles": [
-          "anonymous"
-        ],
-        "methods": [
-          "POST"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/threads",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
+        "roles": ["anonymous"],
+        "methods": ["POST"],
         "description": "User registration"
       }
     ]
@@ -45,51 +13,54 @@
     "url": "/api/login",
     "accesses": [
       {
-        "roles": [
-          "anonymous"
-        ],
-        "methods": [
-          "POST"
-        ],
+        "roles": ["anonymous"],
+        "methods": ["POST"],
         "description": "User login"
       },
       {
-        "roles": [
-          "user",
-          "admin",
-          "superadmin"
-        ],
-        "methods": [
-          "DELETE",
-          "GET"
-        ],
-        "description": "User logout and get user object"
+        "roles": ["user", "admin", "superadmin"],
+        "methods": ["GET", "DELETE"],
+        "description": "Get user info or logout"
       }
     ]
   },
   {
-    "url": "/api/products",
+    "url": "/api/forums",
     "accesses": [
       {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "Any type of user, incl anonymous, can access this route"
-      },
+        "roles": ["*"],
+        "methods": ["GET"],
+        "description": "Fetch all forums"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums/:id",
+    "accesses": [
       {
-        "roles": [
-          "admin",
-          "superadmin"
-        ],
-        "methods": [
-          "POST",
-          "PUT",
-          "DELETE"
-        ],
-        "description": "Restricted route for admins for creating, editing and deleting"
+        "roles": ["*"],
+        "methods": ["GET"],
+        "description": "Fetch single forum by ID"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums/by-name/:name",
+    "accesses": [
+      {
+        "roles": ["*"],
+        "methods": ["GET"],
+        "description": "Fetch single forum by name"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums/by-slug/:slug",
+    "accesses": [
+      {
+        "roles": ["*"],
+        "methods": ["GET"],
+        "description": "Fetch single forum by slug"
       }
     ]
   }
