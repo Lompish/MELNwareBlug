@@ -9,8 +9,11 @@ import userId from "./endpointGetUserId.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 import userByEmail from './endpointGetUserByEmail.js'; // ← Lägg till denna
-
 import userByUsername from "./endpointGetUserByUsername.js";
+import hash from "./encryption.js";
+import updateUser from './endpointPatchUpdateUser.js'; // ← Lägg till denna
+
+
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -32,5 +35,7 @@ export default function (server, database) {
   // other(server, acl, path, database)
   // post(server, acl, path, database)
   userByUsername(server, path, database);
+  updateUser(server, path, database, hash);
+
 }
 
