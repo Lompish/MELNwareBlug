@@ -1,6 +1,6 @@
 import hash from "./encryption.js"
 
-export default function login(app, acl, path, database) {
+export default function login(app, path, database) {
 
   // Kollar om någon är inloggad
   app.get(`${path}/login`, async (request, response) => {

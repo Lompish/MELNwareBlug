@@ -1,4 +1,4 @@
-import acl from "./acl.js";
+//import acl from "./acl.js";
 import login from "./endpointLogin.js";
 import forum from "./endpointForum.js";
 import postThread from "./endpointPostThread.js";
