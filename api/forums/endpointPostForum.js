@@ -1,4 +1,4 @@
-export default function postForums(app, acl, path, database) {
+export default function postForums(app, path, database) {
 
   // En endpoint lägger till en ny forum i forums-tabellen - I Postman, POST
   app.post("/api/forums", async (request, response) => {
