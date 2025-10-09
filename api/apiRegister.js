@@ -1,14 +1,17 @@
 //import acl from "./acl.js";
 import login from "./endpointLogin.js";
 import forum from "./endpointGetForum.js";
+import postThread from "./endpointPostThread.js";
 import thread from "./endpointThread.js";
+import patchThread from "./endpointPatchThread.js";
 import user from "./endpointUser.js";
 import postForum from "./endpointPostForum.js";
 import deleteForum from "./endpointDeleteForum.js";
 import forumId from "./endpointGetForumId.js";
 import forumSlug from "./endpointSlug.js";
+import threadByTitle from "./endpointGetThreadByTitle.js";
+import deleteThread from "./endpointDeleteThread.js";
 import getUser from "./endpointGetUser.js";
-//import threadByTitle from "./endpointThreadByTitle.js";
 import userId from "./endpointGetUserId.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
@@ -31,14 +34,17 @@ export default function (server, database) {
   login(server, path, database)
   user(server, path, database)
   forum(server, path, database)
+  postThread(server, path, database)
   thread(server, path, database)
   postForum(server, path, database)
   deleteForum(server, path, database)
   forumId(server, path, database)
   forumSlug(server, path, database)
+  patchThread(server, path, database)
+  threadByTitle(server, path, database)
+  deleteThread(server, path, database)
   getUser(server, path, database)
-  userByEmail(server, path, database); // ← Lägg till denna
-  //threadByTitle(server, path, database)
+  userByEmail(server, path, database);
   userId(server, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
@@ -46,4 +52,3 @@ export default function (server, database) {
   updateUser(server, path, database, hash);
 
 }
-
