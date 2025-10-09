@@ -1,4 +1,4 @@
-export default function patchThreads(app, acl, path, database) {
+export default function patchThreads(app, path, database) {
   // Edit a thread (PATCH)
 app.patch(`${path}/threads/:id`, async (request, response) => {
   const user = request.session.user

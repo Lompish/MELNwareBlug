@@ -1,4 +1,4 @@
-export default function postThread(app, acl, path, database) {
+export default function postThread(app, path, database) {
   // Create new thread
   app.post(`${path}/threads`, async (request, response) => {
     const user = request.session.user;
