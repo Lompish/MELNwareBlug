@@ -6,6 +6,7 @@ import user from "./endpointUser.js";
 import getUser from "./endpointGetUser.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
+import userByEmail from './endpointGetUserByEmail.js'; // ← Lägg till denna
 
 
 //////import { readFileSync } from "fs"
@@ -23,6 +24,8 @@ export default function (server, database) {
   forum(server, acl, path, database)
   thread(server, acl, path, database)
   getUser(server, acl, path, database)
+  userByEmail(server, path, database); // ← Lägg till denna
+
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
