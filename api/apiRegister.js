@@ -28,7 +28,7 @@ export default function (server, database) {
   thread(server, path, database)
   patchThread(server, path, database)
   threadByTitle(server, path, database)
-  deleteThread(server, acl, path, database)
+  deleteThread(server, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 

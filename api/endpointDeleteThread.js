@@ -1,4 +1,4 @@
-export default function deleteThread(app, acl, path, database) {
+export default function deleteThread(app, path, database) {
   // DELETE THREAD
 app.delete(`${path}/threads/:forumId/:threadId`, async (request, response) => {
   const user = request.session.user
