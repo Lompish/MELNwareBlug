@@ -40,7 +40,21 @@
         "methods": [
           "GET"
         ],
-        "description": "User registration"
+        "description": "Get all forums"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a new forum"
       }
     ]
   },

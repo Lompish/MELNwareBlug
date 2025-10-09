@@ -1,6 +1,6 @@
 //import acl from "./acl.js";
 import login from "./endpointLogin.js";
-import forum from "./endpointForum.js";
+import forum from "./endpointGetForum.js";
 import thread from "./endpointThread.js";
 import user from "./endpointUser.js";
 import postForum from "./endpointPostForum.js";
