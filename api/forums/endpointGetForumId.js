@@ -1,6 +1,6 @@
-export default function forumId(app, database) {
+export default function forumId(app, path, database) {
   // Hämta forum med id
-  app.get(`/api/forums/by-id/:id`, async (request, response) => {
+  app.get(`${path}/forums/by-id/:id`, async (request, response) => {
     const forumId = request.params.id;
 
     // const [result] = await database.execute("SELECT * FROM products")
