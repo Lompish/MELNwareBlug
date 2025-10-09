@@ -5,7 +5,7 @@ import postThread from "./endpointPostThread.js";
 import thread from "./endpointThread.js";
 import patchThread from "./endpointPatchThread.js";
 import user from "./endpointUser.js";
-import threadByTitle from "./endpointThreadByTitle.js";
+import threadByTitle from "./endpointGetThreadByTitle.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
