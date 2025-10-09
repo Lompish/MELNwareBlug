@@ -4,6 +4,8 @@ import forum from "./endpointForum.js";
 import thread from "./endpointThread.js";
 import user from "./endpointUser.js";
 import getUser from "./endpointGetUser.js";
+//import threadByTitle from "./endpointThreadByTitle.js";
+import userId from "./endpointGetUserId.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 import userByEmail from './endpointGetUserByEmail.js'; // ← Lägg till denna
@@ -25,10 +27,10 @@ export default function (server, database) {
   thread(server, acl, path, database)
   getUser(server, acl, path, database)
   userByEmail(server, path, database); // ← Lägg till denna
-
+  //threadByTitle(server, path, database)
+  userId(server, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
-
   userByUsername(server, path, database);
 }
 
