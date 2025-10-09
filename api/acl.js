@@ -8,16 +8,17 @@
 export default function acl(request, response, next) {
 
   const userRoles = ["*"]
-  const sessionRole = request.session?.user?.role
-  if (sessionRole) {
-    userRoles.push(sessionRole)
+  if (request.session?.user) {
+    userRoles.push("user")
   } else {
     userRoles.push("anonymous")
   }
 
   for (const route of accessList) {
+    // Match exact path or paths that start with the route (for /api/threads/1, /api/threads/2, etc.)
+    const pathMatches = request.path === route.url || request.path.startsWith(route.url + '/')
 
-    if (route.url === request.path) {
+    if (pathMatches) {
       for (const access of route.accesses) {
         // matching the intersection between two arrays
         if (userRoles.some(userRole => access.roles.includes(userRole))
