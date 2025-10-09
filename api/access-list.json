@@ -7,7 +7,65 @@
           "anonymous"
         ],
         "methods": [
+          "POST"
+        ],
+        "description": "User registration"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET",
           "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "description": "Post forum and get all forums"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums/by-id/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get all forums"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a new forum"
+      }
+    ]
+  },
+  {
+    "url": "/api/threads",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
           "GET"
         ],
         "description": "User registration"

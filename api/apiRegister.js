@@ -1,8 +1,12 @@
 //import acl from "./acl.js";
 import login from "./endpointLogin.js";
-import forum from "./endpointForum.js";
+import forum from "./endpointGetForum.js";
 import thread from "./endpointThread.js";
 import user from "./endpointUser.js";
+import postForum from "./endpointPostForum.js";
+import deleteForum from "./endpointDeleteForum.js";
+import forumId from "./endpointGetForumId.js";
+import forumSlug from "./endpointSlug.js";
 import getUser from "./endpointGetUser.js";
 //import threadByTitle from "./endpointThreadByTitle.js";
 import userId from "./endpointGetUserId.js";
@@ -28,6 +32,10 @@ export default function (server, database) {
   user(server, path, database)
   forum(server, path, database)
   thread(server, path, database)
+  postForum(server, path, database)
+  deleteForum(server, path, database)
+  forumId(server, path, database)
+  forumSlug(server, path, database)
   getUser(server, path, database)
   userByEmail(server, path, database); // ← Lägg till denna
   //threadByTitle(server, path, database)
