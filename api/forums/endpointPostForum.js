@@ -1,16 +1,46 @@
 export default function postForums(app, path, database) {
 
-  // En endpoint lägger till en ny forum i forums-tabellen - I Postman, POST
-  app.post("/api/forums", async (request, response) => {
-    const { forumName, forumDescription, creationDate } = request.body
+  // Endpoint: skapa ett nytt forum
+  app.post(`${path}/forums`, async (request, response) => {
     try {
+      const { forumName, forumDescription } = request.body;
+      const user = request.session.user;
+
+      // Kontrollera att användaren är inloggad
+      if (!user) {
+        return response.status(401).json({ message: "You must be logged in to create a forum." });
+      }
+
+      // Kontrollera att forum-namnet finns
+      if (!forumName || forumName.trim() === "") {
+        return response.status(400).json({ message: "Forum name is required." });
+      }
+
+      // Skapa forumet
       const [result] = await database.execute(
         "INSERT INTO forum (forumName, forumDescription, creationDate) VALUES (?, ?, CURDATE())",
-        [forumName, forumDescription]
-      )
-      return response.status(201).json(result)
+        [forumName, forumDescription || null]
+      );
+
+      const forumId = result.insertId;
+
+      // Koppla skaparen till forumet i user_x_forum
+      await database.execute(
+        "INSERT INTO user_x_forum (userId, forumId, isCreator) VALUES (?, ?, 1)",
+        [user.id, forumId]
+      );
+
+      // Skicka svar
+      return response.status(201).json({
+        message: "Forum created successfully.",
+        forumId,
+        forumName,
+        forumDescription
+      });
+
     } catch (error) {
-      return response.status(409).json({ message: "Server error." })
+      console.error("Error creating forum:", error);
+      return response.status(500).json({ message: "Server error." });
     }
-  })
+  });
 }
