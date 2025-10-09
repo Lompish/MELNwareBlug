@@ -1,19 +1,6 @@
-import hash from "./encryption.js"
+import hash from "../encryption.js"
 
 export default function login(app, path, database) {
-
-  // Kollar om någon är inloggad
-  app.get(`${path}/login`, async (request, response) => {
-    if (request.session.user) {
-      return response.status(200).json({
-        username: request.session.user.username
-      })
-    } else {
-      return response.status(200).json({
-        message: "No one is logged in."
-      })
-    }
-  })
 
   // Logga in
   app.post(`${path}/login`, async (request, response) => {
@@ -54,27 +41,5 @@ export default function login(app, path, database) {
         message: "Server error."
       })
     }
-  })
-
-  // Logga ut 
-  app.delete(`${path}/login`, async (request, response) => {
-    if (!request.session.user) {
-      return response.status(401).json({
-        message: "No one is logged in."
-      })
-    }
-
-    request.session.destroy((err) => {
-      if (err) {
-        console.log(err)
-        return response.status(500).json({
-          message: "Something went wrong while logging out."
-        })
-      }
-
-      return response.status(200).json({
-        message: "You have logged out."
-      })
-    })
   })
 }

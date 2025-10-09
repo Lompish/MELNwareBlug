@@ -1,25 +1,26 @@
 //import acl from "./acl.js";
-import login from "./endpointLogin.js";
-import forum from "./endpointGetForum.js";
-import postThread from "./endpointPostThread.js";
-import thread from "./endpointThread.js";
-import patchThread from "./endpointPatchThread.js";
-import user from "./endpointUser.js";
-import postForum from "./endpointPostForum.js";
-import deleteForum from "./endpointDeleteForum.js";
-import forumId from "./endpointGetForumId.js";
-import forumSlug from "./endpointSlug.js";
-import threadByTitle from "./endpointGetThreadByTitle.js";
-import deleteThread from "./endpointDeleteThread.js";
-import getUser from "./endpointGetUser.js";
-import userId from "./endpointGetUserId.js";
+import login from "./login/endpointPostLogin.js";
+import logout from "./login/endpointDeleteLoginLogout.js";
+import checkLoggedIn from "./login/endpointGetLoginCheckLoggedIn.js";
+import forum from "./forums/endpointGetForum.js";
+import postThread from "./threads/endpointPostThread.js";
+import thread from "./threads/endpointGetThread.js";
+import patchThread from "./threads/endpointPatchThread.js";
+import user from "./users/endpointGetUser.js";
+import postForum from "./forums/endpointPostForum.js";
+import deleteForum from "./forums/endpointDeleteForum.js";
+import forumId from "./forums/endpointGetForumId.js";
+import forumSlug from "./forums/endpointSlugForum.js";
+import threadByTitle from "./threads/endpointGetThreadByTitle.js";
+import deleteThread from "./threads/endpointDeleteThread.js";
+import getUser from "./users/endpointGetUser.js";
+import userId from "./users/endpointGetUserId.js";
+import userByEmail from './users/endpointGetUserByEmail.js';
+import userByUsername from "./users/endpointGetUserByUsername.js";
+import updateUser from './users/endpointPatchUpdateUser.js';
+import hash from "./encryption.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
-import userByEmail from './endpointGetUserByEmail.js'; // ← Lägg till denna
-import userByUsername from "./endpointGetUserByUsername.js";
-import hash from "./encryption.js";
-import updateUser from './endpointPatchUpdateUser.js'; // ← Lägg till denna
-
 
 //////import { readFileSync } from "fs"
 
@@ -32,6 +33,8 @@ export default function (server, database) {
   const path = "/api"
 
   login(server, path, database)
+  logout(server, path, database)
+  checkLoggedIn(server, path, database)
   user(server, path, database)
   forum(server, path, database)
   postThread(server, path, database)
@@ -46,9 +49,8 @@ export default function (server, database) {
   getUser(server, path, database)
   userByEmail(server, path, database);
   userId(server, path, database)
-  // other(server, acl, path, database)
-  // post(server, acl, path, database)
   userByUsername(server, path, database);
   updateUser(server, path, database, hash);
-
+  // other(server, acl, path, database)
+  // post(server, acl, path, database)
 }

@@ -1,4 +1,4 @@
-import hash from "./encryption.js"
+import hash from "../encryption.js"
 
 export default function user(app, path, database) {
   // Lägg till en ny användare (user registration)
