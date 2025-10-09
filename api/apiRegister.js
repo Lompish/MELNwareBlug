@@ -6,6 +6,7 @@ import thread from "./endpointThread.js";
 import patchThread from "./endpointPatchThread.js";
 import user from "./endpointUser.js";
 import threadByTitle from "./endpointGetThreadByTitle.js";
+import deleteThread from "./endpointDeleteThread.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
@@ -27,9 +28,9 @@ export default function (server, database) {
   thread(server, path, database)
   patchThread(server, path, database)
   threadByTitle(server, path, database)
+  deleteThread(server, acl, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
 
 }
-
