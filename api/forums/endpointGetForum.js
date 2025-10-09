@@ -1,4 +1,4 @@
-export default function forum(app, acl, path, database) {
+export default function forum(app, path, database) {
 
   // En endpoint som hämtar data från forums-tabellen i databasen - gå till http://localhost:3000/api/forums
   app.get("/api/forums", async (request, response) => {
