@@ -7,7 +7,8 @@
           "anonymous"
         ],
         "methods": [
-          "POST"
+          "POST",
+          "GET"
         ],
         "description": "User registration"
       }
