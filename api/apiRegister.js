@@ -24,11 +24,11 @@ import updateUser from './endpointPatchUpdateUser.js'; // ← Lägg till denna
 export default function (server, database) {
   const path = "/api"
 
-  login(server, acl, path, database)
-  user(server, acl, path, database)
-  forum(server, acl, path, database)
-  thread(server, acl, path, database)
-  getUser(server, acl, path, database)
+  login(server, path, database)
+  user(server, path, database)
+  forum(server, path, database)
+  thread(server, path, database)
+  getUser(server, path, database)
   userByEmail(server, path, database); // ← Lägg till denna
   //threadByTitle(server, path, database)
   userId(server, path, database)
