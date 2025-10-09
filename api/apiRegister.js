@@ -5,6 +5,7 @@ import thread from "./endpointThread.js";
 import user from "./endpointUser.js";
 import postForum from "./endpointPostForum.js";
 import deleteForum from "./endpointDeleteForum.js";
+import forumId from "./endpointGetForumId.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
@@ -25,6 +26,7 @@ export default function (server, database) {
   thread(server, acl, path, database)
   postForum(server, acl, path, database)
   deleteForum(server, acl, path, database)
+  forumId(server, acl, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
