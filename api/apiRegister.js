@@ -6,6 +6,7 @@ import user from "./endpointUser.js";
 import postForum from "./endpointPostForum.js";
 import deleteForum from "./endpointDeleteForum.js";
 import forumId from "./endpointGetForumId.js";
+import forumSlug from "./endpointSlug.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
@@ -20,13 +21,14 @@ import forumId from "./endpointGetForumId.js";
 export default function (server, database) {
   const path = "/api"
 
-  login(server, acl, path, database)
-  user(server, acl, path, database)
-  forum(server, acl, path, database)
-  thread(server, acl, path, database)
-  postForum(server, acl, path, database)
-  deleteForum(server, acl, path, database)
-  forumId(server, acl, path, database)
+  login(server, path, database)
+  user(server, path, database)
+  forum(server, path, database)
+  thread(server, path, database)
+  postForum(server, path, database)
+  deleteForum(server, path, database)
+  forumId(server, path, database)
+  forumSlug(server, path, database)
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 
