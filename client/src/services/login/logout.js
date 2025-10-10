@@ -1,9 +1,8 @@
-export default async function () {
+export default async function logout() {
     const response = await fetch("/api/login", {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: "include"
     })
-
     const result = await response.json()
-
-    return { response: response, result: result }
-} 
+    return { response, result }
+}

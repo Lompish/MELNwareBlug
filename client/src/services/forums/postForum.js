@@ -1,13 +1,14 @@
-export default async function (name) {
+export default async function (name, description = "") {
     const response = await fetch("/api/forums", {
-        method: "post",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
-            name: name
+            forumName: name,
+            forumDescription: description
         })
     })
 
     const result = await response.json()
-
-    return { response: response, result: result }
+    return { response, result }
 }

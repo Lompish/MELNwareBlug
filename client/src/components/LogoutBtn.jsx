@@ -9,7 +9,7 @@ export default function LogoutBtn() {
     async function logoutUser() {
         const { response } = await logout()
 
-        if (response.status == 201) {
+        if (response.status == 200) {
             await checkLogin()
         } else {
             alert("Something gone wrong when logging out.")

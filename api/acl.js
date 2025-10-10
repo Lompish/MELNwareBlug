@@ -30,6 +30,7 @@ export default function acl(request, response, next) {
     }
 
   }
+  console.log("ACL check:", request.method, request.path, userRoles)
 
   return response.status(403).json({ message: "Access forbidden" })
 

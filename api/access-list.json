@@ -1,5 +1,41 @@
 [
   {
+    "url": "/api/login",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Log in user"
+      },
+      {
+        "roles": [
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Check if user is logged in"
+      },
+      {
+        "roles": [
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Log out user"
+      }
+    ]
+  },
+  {
     "url": "/api/users",
     "accesses": [
       {
@@ -9,90 +45,37 @@
         "methods": [
           "POST"
         ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums",
-    "accesses": [
+        "description": "Register a new user"
+      },
       {
         "roles": [
-          "*"
+          "user",
+          "moderator",
+          "admin"
         ],
         "methods": [
-          "GET",
-          "POST",
-          "PUT",
-          "DELETE"
+          "PATCH"
         ],
-        "description": "Post forum and get all forums"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums/by-id/:id",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "Get all forums"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums",
-    "accesses": [
+        "description": "Edit own profile"
+      },
       {
         "roles": [
           "user"
         ],
         "methods": [
-          "POST"
+          "DELETE"
         ],
-        "description": "Create a new forum"
-      }
-    ]
-  },
-  {
-    "url": "/api/threads",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/login",
-    "accesses": [
-      {
-        "roles": [
-          "anonymous"
-        ],
-        "methods": [
-          "POST"
-        ],
-        "description": "User login"
+        "description": "Delete own account"
       },
       {
         "roles": [
-          "*"
+          "admin"
         ],
         "methods": [
-          "DELETE",
-          "GET"
+          "GET",
+          "DELETE"
         ],
-        "description": "User logout and get user object"
+        "description": "View or delete any user"
       }
     ]
   },
@@ -101,7 +84,10 @@
     "accesses": [
       {
         "roles": [
-          "*"
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
         ],
         "methods": [
           "GET"
@@ -116,6 +102,49 @@
           "POST"
         ],
         "description": "Create a new forum"
+      },
+      {
+        "roles": [
+          "admin"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Delete or restore forums"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums/:id",
+    "accesses": [
+      {
+        "roles": [
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View forum by ID"
+      }
+    ]
+  },
+  {
+    "url": "/api/forums/slug/:slug",
+    "accesses": [
+      {
+        "roles": [
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View forum by slug"
       }
     ]
   },
@@ -124,23 +153,82 @@
     "accesses": [
       {
         "roles": [
-          "*"
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
         ],
         "methods": [
           "GET"
         ],
-        "description": "View all threads"
+        "description": "View all threads (public)"
       },
       {
         "roles": [
-          "*"
+          "user",
+          "moderator",
+          "admin"
         ],
         "methods": [
-          "POST",
-          "PATCH",
+          "POST"
+        ],
+        "description": "Create a new thread; user becomes thread owner"
+      }
+    ]
+  },
+  {
+    "url": "/api/threads/:id",
+    "accesses": [
+      {
+        "roles": [
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View a specific thread (if public or user has access)"
+      },
+      {
+        "roles": [
+          "owner",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "PATCH"
+        ],
+        "description": "Edit thread (owner, moderator, or admin only)"
+      },
+      {
+        "roles": [
+          "owner",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
           "DELETE"
         ],
-        "description": "Create, edit or delete threads"
+        "description": "Delete thread (owner, moderator, or admin only)"
+      }
+    ]
+  },
+  {
+    "url": "/api/threads/title/:title",
+    "accesses": [
+      {
+        "roles": [
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get thread by title"
       }
     ]
   },
@@ -149,49 +237,88 @@
     "accesses": [
       {
         "roles": [
-          "*"
+          "anonymous",
+          "user",
+          "moderator",
+          "admin"
         ],
         "methods": [
           "GET"
         ],
-        "description": "View all posts"
+        "description": "View all posts in a public thread"
       },
       {
         "roles": [
-          "*"
+          "user",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a new post in a thread"
+      },
+      {
+        "roles": [
+          "owner",
+          "moderator",
+          "admin"
+        ],
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Edit or delete own posts (or moderator/admin)"
+      }
+    ]
+  },
+  {
+    "url": "/api/invitations",
+    "accesses": [
+      {
+        "roles": [
+          "owner",
+          "moderator"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Invite users to private threads"
+      },
+      {
+        "roles": [
+          "owner",
+          "moderator"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Remove invited users from a private thread"
+      }
+    ]
+  },
+  {
+    "url": "/api/admin",
+    "accesses": [
+      {
+        "roles": [
+          "admin"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View system statistics and reports"
+      },
+      {
+        "roles": [
+          "admin"
         ],
         "methods": [
           "POST",
           "PATCH",
           "DELETE"
         ],
-        "description": "Create, edit or delete your own posts"
-      }
-    ]
-  },
-  {
-    "url": "/api/products",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "Any type of user, incl anonymous, can access this route"
-      },
-      {
-        "roles": [
-          "admin",
-          "superadmin"
-        ],
-        "methods": [
-          "POST",
-          "PUT",
-          "DELETE"
-        ],
-        "description": "Restricted route for admins for creating, editing and deleting"
+        "description": "Manage users, forums, threads, and posts at system level"
       }
     ]
   }

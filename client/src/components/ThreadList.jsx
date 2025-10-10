@@ -5,7 +5,7 @@ export default function ThreadList({ threadList }) {
     return <div className="flex flex-col gap-5">
         {
             threadList.map((thread, key) => {
-                return <ThreadCard key={key} thread={thread} />
+                return <ThreadCard key={thread.id} thread={thread} />
             })
         }
     </div>

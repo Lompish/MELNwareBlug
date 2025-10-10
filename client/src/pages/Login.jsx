@@ -15,7 +15,7 @@ export default function Login() {
 
         const result = await login(username, password)
 
-        if (result.response.status == 201) {
+        if (result.response.status == 200) {
             await checkLogin()
             navigate(from, { replace: true })
         } else {

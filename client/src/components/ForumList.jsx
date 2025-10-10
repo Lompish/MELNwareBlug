@@ -5,8 +5,8 @@ export default function ForumList({ forumList }) {
     console.log(forumList)
     return <div className="flex flex-col gap-5">
         {
-            forumList.map((forum, key) => {
-                return <ForumCard key={key} forum={forum} />
+            forumList.map((forum) => {
+                return <ForumCard key={forum.id} forum={forum} />
             })
         }
     </div>

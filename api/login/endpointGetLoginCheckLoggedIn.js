@@ -7,7 +7,7 @@ export default function checkLoggedIn(app, path, database) {
         username: request.session.user.username
       })
     } else {
-      return response.status(200).json({
+      return response.status(401).json({
         message: "No one is logged in."
       })
     }
