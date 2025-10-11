@@ -20,7 +20,7 @@ import userByUsername from "./users/endpointGetUserByUsername.js";
 import updateUser from './users/endpointPatchUpdateUser.js';
 import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
-// import post from "./endpointPosts.js";
+import postPost from "./posts/endpointPostPost.js";
 // import other from "./endpointOthers.js";
 
 //////import { readFileSync } from "fs"
@@ -54,5 +54,5 @@ export default function (server, database) {
   updateUser(server, path, database, hash);
   postUser(server, path, database);
   // other(server, acl, path, database)
-  // post(server, acl, path, database)
+  postPost(server, path, database)
 }
