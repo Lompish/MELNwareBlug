@@ -22,7 +22,7 @@ import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
 import postPost from "./posts/endpointPostPost.js";
 // import other from "./endpointOthers.js";
-
+import getPost from "./posts/endpointGetPost.js";
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -55,4 +55,5 @@ export default function (server, database) {
   postUser(server, path, database);
   // other(server, acl, path, database)
   postPost(server, path, database)
+  getPost(server, path, database)
 }
