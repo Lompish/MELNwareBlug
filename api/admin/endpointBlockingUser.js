@@ -2,6 +2,8 @@
 // endast en admin ska kunna blockera en user
 // forum och trådar ska inte påverkas
 
+// EJ TESTAT I POSTMAN ÄNNU
+
 export function blockUserEndpoint(app, path, database) {
   app.patch(`${path}/api/admin/block-user`, async (req, res) => {
     const forumId = req.params.id;
