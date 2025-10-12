@@ -1,3 +1,8 @@
+// den här koden raderar en användare från users-tabellen i databasen
+// endast admin får radera användare
+// dock raderas inte användarens forum, inlägg eller trådar
+// detta är en "hard delete" som tar bort användaren helt
+
 export default function deleteUser(app, path, database) {
 
   app.delete(`${path}/users/:id`, async (request, response) => {
@@ -18,8 +23,3 @@ export default function deleteUser(app, path, database) {
     }
   })
 }
-
-// ta bort trådar av användaren?
-// ta bort inlägg av användaren?
-// eller göra en soft delete (sätta active = false)
-// och ersätta namn och email med anonym1234, anonym1235 etc?
