@@ -2,6 +2,8 @@
 // endast admin får radera användare i den här koden
 // användarens forum, inlägg eller trådar påverkas, men endast att användarnamnet visas som "Deleted User ##"
 
+// INTE TESTAD I POSTMAN
+
 export function softDeleteUser(app, path, database) {
   app.patch(`${path}/users/:id`, async (request, response) => {
     const userId = request.params.id;

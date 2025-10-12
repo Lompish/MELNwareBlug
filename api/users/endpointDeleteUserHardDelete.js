@@ -3,6 +3,8 @@
 // dock raderas inte användarens forum, inlägg eller trådar
 // detta är en "hard delete" som tar bort användaren helt
 
+// INTE TESTAD I POSTMAN
+
 export default function deleteUser(app, path, database) {
 
   app.delete(`${path}/users/:id`, async (request, response) => {

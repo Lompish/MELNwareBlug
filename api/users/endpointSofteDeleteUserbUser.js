@@ -2,6 +2,8 @@
 // både admin och användaren själv kan radera kontot i den här koden
 // användarens forum, inlägg eller trådar påverkas, men endast att användarnamnet visas som "Deleted User ##"
 
+// INTE TESTAD I POSTMAN
+
 export function softDeleteUserByUorA(app, path, database) {
   app.patch(`${path}/users/:id`, async (request, response) => {
     const userIdToDelete = parseInt(request.params.id);
