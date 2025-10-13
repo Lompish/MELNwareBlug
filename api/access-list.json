@@ -1,6 +1,6 @@
 [
   {
-    "url": "/api/users",
+    "url": "/users",
     "accesses": [
       {
         "roles": [
@@ -9,29 +9,104 @@
         "methods": [
           "POST"
         ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums",
-    "accesses": [
+        "description": "User registration - anyone can register"
+      },
       {
         "roles": [
           "*"
         ],
         "methods": [
-          "GET",
-          "POST",
-          "PUT",
-          "DELETE"
+          "GET"
         ],
-        "description": "Post forum and get all forums"
+        "description": "Get all users - anyone can view user list"
       }
     ]
   },
   {
-    "url": "/api/forums/by-id/:id",
+    "url": "/users/:id",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get user by ID - users can view"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH"
+        ],
+        "description": "Update user - checked in endpoint"
+      }
+    ]
+  },
+  {
+    "url": "/users/by-username/:username",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Search users by username"
+      }
+    ]
+  },
+  {
+    "url": "/users/by-email/:email",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Search users by email"
+      }
+    ]
+  },
+  {
+    "url": "/login",
+    "accesses": [
+      {
+        "roles": [
+          "anonymous"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "User login - only non-logged in users"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "User logout - only logged in users"
+      },
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Check login status - anyone"
+      }
+    ]
+  },
+  {
+    "url": "/forums",
     "accesses": [
       {
         "roles": [
@@ -40,12 +115,162 @@
         "methods": [
           "GET"
         ],
-        "description": "Get all forums"
+        "description": "View all forums - anyone"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create forum - only logged in users"
       }
     ]
   },
   {
-    "url": "/api/forums",
+    "url": "/forums/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get forum by ID - anyone"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Update/delete forum - logged in users"
+      }
+    ]
+  },
+  {
+    "url": "/forums/by-id/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get forum by ID"
+      }
+    ]
+  },
+  {
+    "url": "/forums/by-slug/:slug",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get forum by slug"
+      }
+    ]
+  },
+  {
+    "url": "/forums/by-name/:name",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get forum by name"
+      }
+    ]
+  },
+  {
+    "url": "/threads",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View all threads - anyone can see public threads"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create thread - only logged in users"
+      }
+    ]
+  },
+  {
+    "url": "/threads/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View thread - anyone"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Update/delete thread - logged in"
+      }
+    ]
+  },
+  {
+    "url": "/threads/by-title/:title",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Search threads by title"
+      }
+    ]
+  },
+  {
+    "url": "/threads/:forumId/:threadId",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Delete thread - owner only"
+      }
+    ]
+  },
+  {
+    "url": "/threads/:threadId/moderators",
     "accesses": [
       {
         "roles": [
@@ -54,98 +279,40 @@
         "methods": [
           "POST"
         ],
-        "description": "Create a new forum"
+        "description": "Add moderator - thread owner only"
       }
     ]
   },
   {
-    "url": "/api/threads",
+    "url": "/threads/:threadId/moderators/:userId",
     "accesses": [
       {
         "roles": [
-          "*"
+          "user"
         ],
         "methods": [
-          "GET"
-        ],
-        "description": "User registration"
-      }
-    ]
-  },
-  {
-    "url": "/api/login",
-    "accesses": [
-      {
-        "roles": [
-          "anonymous"
-        ],
-        "methods": [
-          "POST"
-        ],
-        "description": "User login"
-      },
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "DELETE",
-          "GET"
-        ],
-        "description": "User logout and get user object"
-      }
-    ]
-  },
-  {
-    "url": "/api/forums",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "View all public forums"
-      },
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "POST"
-        ],
-        "description": "Create a new forum"
-      }
-    ]
-  },
-  {
-    "url": "/api/threads",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "View all threads"
-      },
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "POST",
-          "PATCH",
           "DELETE"
         ],
-        "description": "Create, edit or delete threads"
+        "description": "Remove moderator - thread owner only"
       }
     ]
   },
   {
-    "url": "/api/posts",
+    "url": "/threads/:threadId/transfer-ownership",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH"
+        ],
+        "description": "Transfer thread ownership - thread owner only"
+      }
+    ]
+  },
+  {
+    "url": "/csrf-token",
     "accesses": [
       {
         "roles": [
@@ -154,23 +321,12 @@
         "methods": [
           "GET"
         ],
-        "description": "View all posts"
-      },
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "POST",
-          "PATCH",
-          "DELETE"
-        ],
-        "description": "Create, edit or delete your own posts"
+        "description": "Get CSRF token"
       }
     ]
   },
   {
-    "url": "/api/products",
+    "url": "/health",
     "accesses": [
       {
         "roles": [
@@ -179,19 +335,7 @@
         "methods": [
           "GET"
         ],
-        "description": "Any type of user, incl anonymous, can access this route"
-      },
-      {
-        "roles": [
-          "admin",
-          "superadmin"
-        ],
-        "methods": [
-          "POST",
-          "PUT",
-          "DELETE"
-        ],
-        "description": "Restricted route for admins for creating, editing and deleting"
+        "description": "Health check"
       }
     ]
   }

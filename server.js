@@ -5,7 +5,13 @@ import session from "express-session";
 import apiRegister from "./api/apiRegister.js";
 import 'dotenv/config';
 import rateLimit from "express-rate-limit";
-//Import acl from "./api/acl.js";
+import acl from "./api/acl.js";
+
+// Nya säkerhetsimporter
+import helmet from "helmet";
+import cors from "cors";
+import cookieParser from 'cookie-parser';
+import csrf from 'csurf';
 
 
 // Databas konfiguration.
@@ -17,13 +23,60 @@ const database = await mysql.createConnection({
     database: process.env.DB_DATABASE
 })
 
+// Testa databasuppkoppling
+try {
+    await database.ping()
+    console.log('Database connected successfully')
+} catch (error) {
+    console.error('Database connection failed:', error)
+    process.exit(1)
+}
+
 // Skapar ett express-objekt.
 const app = express()
 // Vilken port vi ska lägga servern på.
 const port = 3000
 
-// En middleware som låter oss hantera json-data i våra request.
-app.use(express.json())
+// Säkerhets-middleware
+// HELMET - Säkerhetsheaders
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"], // ingen inline förhindrar XSS
+            scriptSrc: ["'self'"], // ladda bara js från egen server
+            imgSrc: ["'self'", "data:", "https:"], // ladda bara bilder från egen serber
+        },
+    },
+    hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true
+    }
+}))
+
+// CORS - Kontrollera vilka domäner som får göra requests
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    credentials: true, // Tillåt cookies
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
+}))
+
+// BODY PARSING med storleksbegränsning
+app.use(express.json({
+    limit: '10kb', // Begränsa request body storlek
+    strict: true   // Acceptera bara arrays och objects
+}))
+
+// URL encoded body parsing
+app.use(express.urlencoded({
+    extended: true,
+    limit: '10kb'
+}))
+
+// COOKIE PARSER(för CSRF)
+app.use(cookieParser())
 
 // RATE LIMITERS
 // Generell limiter för alla API-anrop
@@ -75,15 +128,28 @@ const updateLimiter = rateLimit({
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // Säkrare än true
+    name: 'sid', // Generic name istället för default
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 timmar
-    }
+        maxAge: 24 * 60 * 60 * 1000, // 24 timmar
+        sameSite: 'strict' // CSRF protection
+    },
+    rolling: true, // Förnya cookie vid varje request
+    proxy: process.env.NODE_ENV === 'production' // Trust proxy i production
 }))
 
-// APPLICERA RATE LIMITERS
+// CSRF PROTECTION
+const csrfProtection = csrf({ cookie: true })
+
+// Endpoint för att få CSRF token
+app.get('/api/csrf-token', csrfProtection, (req, res) => {
+    res.json({ csrfToken: req.csrfToken() })
+})
+
+
+// APPLICERA RATE LIMITERS + CSRF
 // Generell limiter på ALLA routes
 app.use('/api', generalLimiter)
 
@@ -92,21 +158,29 @@ app.use('/api/login', authLimiter)              // POST login
 app.use('/api/users', registerLimiter)          // POST users (registrering)
 
 // Skapa innehåll
-app.post('/api/forums', createContentLimiter)   // POST forum
-app.post('/api/threads', createContentLimiter)  // POST thread
+app.post('/api/forums', csrfProtection, createContentLimiter)   // POST forum
+app.post('/api/threads', csrfProtection, createContentLimiter)  // POST thread
 
 // Delete operationer
-app.delete('/api/forums/:id', deleteLimiter)    // DELETE forum
-app.delete('/api/threads/:id', deleteLimiter)   // DELETE thread
+app.delete('/api/forums/:id', csrfProtection, deleteLimiter)    // DELETE forum
+app.delete('/api/threads/:id', csrfProtection, deleteLimiter)   // DELETE thread
+app.delete('/api/threads/:forumId/:threadId', csrfProtection, deleteLimiter)
 
 // Update operationer
-app.patch('/api/threads/:id', updateLimiter)    // PATCH thread
-app.patch('/api/users/:id', updateLimiter)      // PATCH user
+app.patch('/api/threads/:id', csrfProtection, updateLimiter)    // PATCH thread
+app.patch('/api/users/:id', csrfProtection, updateLimiter)      // PATCH user
+app.patch('/api/forums/:id', csrfProtection, updateLimiter)
 
+// HEALTH CHECK (SERVER)
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString()
+    })
+})
 
-// Access control list middleware
-// app.use(acl)
-
+// ACCESS CONTROL LIST
+app.use('/api', acl)
 
 // Registrerar alla våra endpoints i api-mappen.
 apiRegister(app, database)
@@ -115,4 +189,8 @@ apiRegister(app, database)
 app.use(express.static("./server/dist"))
 
 // Startar servern när vi kör server.js-filen.
-app.listen(port, () => { console.log(`http://localhost:${port}`) })
+app.listen(port, () => {
+    console.log(`http://localhost:${port}`)
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
+        console.log(`Security features enabled: ACL, Rate Limiting, CSRF, Helmet`)
+    })
