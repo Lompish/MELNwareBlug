@@ -23,7 +23,8 @@ import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
-import postThreadModerator from "./threads/endpointPostThreadModerator.js";
+import postThreadModerator from "./threads/moderators/endpointPostThreadModerator.js";
+import deleteThreadModerator from "./threads/moderators/endpointDeleteThreadModerator.js";
 
 //////import { readFileSync } from "fs"
 
@@ -59,4 +60,5 @@ export default function (server, database) {
   // other(server, acl, path, database)
   // post(server, acl, path, database)
   postThreadModerator(server, path, database)
+  deleteThreadModerator(server, path, database)
 }

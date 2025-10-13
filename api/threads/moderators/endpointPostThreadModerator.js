@@ -1,6 +1,6 @@
 export default function postThreadModerator(app, path, database) {
 
-  // Lägg till moderator till tråd
+  // Lägg till moderator till tråd - http://localhost:3000/api/threads/:thread-id/moderators
   app.post(`${path}/threads/:threadId/moderators`, async (request, response) => {
     const user = request.session.user;
     const { threadId } = request.params;
