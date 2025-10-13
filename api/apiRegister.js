@@ -21,9 +21,11 @@ import userByUsername from "./users/endpointGetUserByUsername.js";
 import updateUser from './users/endpointPatchUpdateUser.js';
 import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
-// import post from "./endpointPosts.js";
+import postPost from "./posts/endpointPostPost.js";
+import patchPost from "./posts/endpontPatchPost.js";
 // import other from "./endpointOthers.js";
-
+import getPost from "./posts/endpointGetPost.js";
+import deletePost from "./posts/endpointDeletePost.js";
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -56,5 +58,8 @@ export default function (server, database) {
   updateUser(server, path, database, hash);
   postUser(server, path, database);
   // other(server, acl, path, database)
-  // post(server, acl, path, database)
+  postPost(server, path, database)
+  getPost(server, path, database)
+  patchPost(server, path, database)
+  deletePost(server, path, database)
 }
