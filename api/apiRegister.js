@@ -25,6 +25,7 @@ import postUser from "./users/endpointPostUser.js";
 // import other from "./endpointOthers.js";
 import postThreadModerator from "./threads/moderators/endpointPostThreadModerator.js";
 import deleteThreadModerator from "./threads/moderators/endpointDeleteThreadModerator.js";
+import patchThreadOwner from "./threads/moderators/endpointPatchThreadOwner.js";
 
 //////import { readFileSync } from "fs"
 
@@ -61,4 +62,5 @@ export default function (server, database) {
   // post(server, acl, path, database)
   postThreadModerator(server, path, database)
   deleteThreadModerator(server, path, database)
+  patchThreadOwner(server, path, database)
 }
