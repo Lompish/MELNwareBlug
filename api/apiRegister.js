@@ -24,6 +24,7 @@ import postPost from "./posts/endpointPostPost.js";
 import patchPost from "./posts/endpontPatchPost.js";
 // import other from "./endpointOthers.js";
 import getPost from "./posts/endpointGetPost.js";
+import deletePost from "./posts/endpointDeletePost.js";
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -58,4 +59,5 @@ export default function (server, database) {
   postPost(server, path, database)
   getPost(server, path, database)
   patchPost(server, path, database)
+  deletePost(server, path, database)
 }
