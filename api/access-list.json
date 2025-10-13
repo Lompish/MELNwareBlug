@@ -312,7 +312,7 @@
     ]
   },
   {
-    "url": "/csrf-token",
+    "url": "/posts",
     "accesses": [
       {
         "roles": [
@@ -321,10 +321,42 @@
         "methods": [
           "GET"
         ],
-        "description": "Get CSRF token"
+        "description": "View all posts - anyone can read posts"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a post - only logged in users"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH"
+        ],
+        "description": "Update a post - only the original poster"
       }
     ]
   },
+    {
+      "url": "/csrf-token",
+      "accesses": [
+        {
+          "roles": [
+            "*"
+          ],
+          "methods": [
+            "GET"
+          ],
+          "description": "Get CSRF token"
+        }
+      ]
+    },
   {
     "url": "/health",
     "accesses": [

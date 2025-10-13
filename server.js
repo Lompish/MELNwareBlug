@@ -160,16 +160,20 @@ app.use('/api/users', registerLimiter)          // POST users (registrering)
 // Skapa innehåll
 app.post('/api/forums', csrfProtection, createContentLimiter)   // POST forum
 app.post('/api/threads', csrfProtection, createContentLimiter)  // POST thread
+app.post('/api/posts', csrfProtection, createContentLimiter) // POST post
 
 // Delete operationer
 app.delete('/api/forums/:id', csrfProtection, deleteLimiter)    // DELETE forum
 app.delete('/api/threads/:id', csrfProtection, deleteLimiter)   // DELETE thread
 app.delete('/api/threads/:forumId/:threadId', csrfProtection, deleteLimiter)
+app.delete('/api/posts/:id', csrfProtection, deleteLimiter) // DELETE post
 
 // Update operationer
 app.patch('/api/threads/:id', csrfProtection, updateLimiter)    // PATCH thread
 app.patch('/api/users/:id', csrfProtection, updateLimiter)      // PATCH user
 app.patch('/api/forums/:id', csrfProtection, updateLimiter)
+app.patch('/api/posts/:id', csrfProtection, updateLimiter) // PATCH post
+
 
 // HEALTH CHECK (SERVER)
 app.get('/api/health', (req, res) => {
