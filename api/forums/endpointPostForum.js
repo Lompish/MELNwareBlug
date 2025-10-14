@@ -16,6 +16,18 @@ export default function postForums(app, path, database) {
         return response.status(400).json({ message: "Forum name is required." });
       }
 
+      // Kontrollera om forum-namnet redan finns (case-insensitive)
+      const [existing] = await database.execute(
+        "SELECT id FROM forum WHERE LOWER(forumName) = LOWER(?)",
+        [forumName.trim()]
+      );
+
+      if (existing.length > 0) {
+        return response.status(409).json({
+          message: "A forum with that name already exists. Please choose another name."
+        });
+      }
+
       // Skapa forumet
       const [result] = await database.execute(
         "INSERT INTO forum (forumName, forumDescription, creationDate) VALUES (?, ?, CURDATE())",
