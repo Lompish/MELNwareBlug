@@ -9,7 +9,7 @@ export default function patchThreads(app, path, database) {
     }
 
     try {
-      // 🔒 Kontrollera blockerad användare
+      // Kontrollera blockerad användare
       const [users] = await database.execute(`SELECT isBlocked FROM user WHERE id = ?`, [user.id]);
       if (users.length && users[0].isBlocked === 1) {
         return response.status(403).json({ message: "Your account is blocked. You can only read content." });
