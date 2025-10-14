@@ -45,7 +45,7 @@ app.use(helmet({
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'"], // ingen inline förhindrar XSS
             scriptSrc: ["'self'"], // ladda bara js från egen server
-            imgSrc: ["'self'", "data:", "https:"], // ladda bara bilder från egen serber
+            imgSrc: ["'self'", "data:", "https:"], // ladda bara bilder från egen server
         },
     },
     hsts: {
