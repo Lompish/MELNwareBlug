@@ -24,6 +24,7 @@ import postUser from "./users/endpointPostUser.js";
 import softDeleteUserByAdmin from "./admin/endpointAdminDeleteUser.js";
 import endpointDeleteFTP from "./admin/endpointDeleteFTP.js";
 import adminLogin from "./admin/endpointAdminLogin.js";
+import adminLogout from "./admin/endpointAdminLogout.js";
 import softDeleteUserByU from "./users/endpointSoftDeleteUser.js";
 // import post from "./endpointPosts.js";
 import postPost from "./posts/endpointPostPost.js";
@@ -90,4 +91,5 @@ export default function (server, database) {
   postUserPrivateThread(server, path, database)
   patchBlockPost(server, path, database)
   getPostsByThreadId(server, path, database)
+  adminLogout(server, path, database)
 }

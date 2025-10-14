@@ -106,6 +106,62 @@
     ]
   },
   {
+    "url": "/admin/login",
+    "accesses": [
+      {
+        "roles": [
+          "anonymous"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Admin login - only non-logged in admins"
+      }
+    ]
+  },
+  {
+    "url": "/admin/logout",
+    "accesses": [
+      {
+        "roles": [
+          "admin"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Admin logout - only logged in admins"
+      }
+    ]
+  },
+  {
+    "url": "/admin/softdelete/:id",
+    "accesses": [
+      {
+        "roles": [
+          "admin"
+        ],
+        "methods": [
+          "PATCH"
+        ],
+        "description": "Soft delete user - admin only"
+      }
+    ]
+  },
+  {
+    "url": "/admin/deleteFTP/:id",
+    "accesses": [
+      {
+        "roles": [
+          "admin"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Hard delete forum with threads and posts - admin only"
+      }
+    ]
+  },
+  {
     "url": "/forums",
     "accesses": [
       {
@@ -125,30 +181,6 @@
           "POST"
         ],
         "description": "Create forum - only logged in users"
-      }
-    ]
-  },
-  {
-    "url": "/forums/:id",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "Get forum by ID - anyone"
-      },
-      {
-        "roles": [
-          "user"
-        ],
-        "methods": [
-          "PATCH",
-          "DELETE"
-        ],
-        "description": "Update/delete forum - logged in users"
       }
     ]
   },
@@ -195,6 +227,30 @@
     ]
   },
   {
+    "url": "/forums/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get forum by ID - anyone"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Update/delete forum - logged in users"
+      }
+    ]
+  },
+  {
     "url": "/threads",
     "accesses": [
       {
@@ -218,30 +274,6 @@
     ]
   },
   {
-    "url": "/threads/:id",
-    "accesses": [
-      {
-        "roles": [
-          "*"
-        ],
-        "methods": [
-          "GET"
-        ],
-        "description": "View thread - anyone"
-      },
-      {
-        "roles": [
-          "user"
-        ],
-        "methods": [
-          "PATCH",
-          "DELETE"
-        ],
-        "description": "Update/delete thread - logged in"
-      }
-    ]
-  },
-  {
     "url": "/threads/by-title/:title",
     "accesses": [
       {
@@ -252,20 +284,6 @@
           "GET"
         ],
         "description": "Search threads by title"
-      }
-    ]
-  },
-  {
-    "url": "/threads/:forumId/:threadId",
-    "accesses": [
-      {
-        "roles": [
-          "user"
-        ],
-        "methods": [
-          "DELETE"
-        ],
-        "description": "Delete thread - owner only"
       }
     ]
   },
@@ -312,25 +330,131 @@
     ]
   },
   {
-    "description": "View all posts - anyone can read posts"
+    "url": "/threads/:threadId/private",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Add user to private thread - moderators only"
+      }
+    ]
   },
   {
-    "roles": [
-      "user"
-    ],
-    "methods": [
-      "POST"
-    ],
-    "description": "Create a post - logged in users"
+    "url": "/threads/:threadId/private/:userId",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Remove user from private thread - moderators only"
+      }
+    ]
   },
   {
-    "roles": [
-      "user"
-    ],
-    "methods": [
-      "PATCH"
-    ],
-    "description": "Update a post - only the original poster"
+    "url": "/threads/:threadId/posts",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get all posts in a thread - anyone can view"
+      }
+    ]
+  },
+  {
+    "url": "/threads/:forumId/:threadId",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Delete thread - owner only"
+      }
+    ]
+  },
+  {
+    "url": "/threads/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View thread - anyone"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Update/delete thread - logged in"
+      }
+    ]
+  },
+  {
+    "url": "/posts",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View all posts - anyone can read posts"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a post - logged in users"
+      }
+    ]
+  },
+  {
+    "url": "/posts/:id",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "View post by ID"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "description": "Update/delete post - only the original poster"
+      }
+    ]
   },
   {
     "url": "/csrf-token",
