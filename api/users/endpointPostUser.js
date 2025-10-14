@@ -1,4 +1,5 @@
-import hash from "../encryption.js"
+import { generateSalt, hashWithSalt } from "../encryption.js"
+import { validatePasswordSimple } from "../passwordValidation.js"
 
 export default function postUser(app, path, database) {
   // Lägg till en ny användare (user registration)
@@ -12,11 +13,34 @@ export default function postUser(app, path, database) {
       })
     }
 
+    // Validera lösenordsstyrka
+    const passwordCheck = validatePasswordSimple(password)
+    if (!passwordCheck.isValid) {
+      return response.status(400).json({
+        message: "Password does not meet requirements.",
+        errors: passwordCheck.errors
+      })
+    }
+
+    // Validera email-format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return response.status(400).json({
+        message: "Invalid email format."
+      })
+    }
 
     try {
+      // Generera unikt salt för denna användare
+      const userSalt = generateSalt()
+
+      // Hash lösenordet med användarens unika salt
+      const hashedPassword = hashWithSalt(password, userSalt)
+
+      // Spara användare MED salt
       const [result] = await database.execute(
-        "INSERT INTO user (username, password, email) VALUES (?, ?, ?)",
-        [username, hash(password), email]
+        "INSERT INTO user (username, password, salt, email, isBlocked) VALUES (?, ?, ?, ?, 0)",
+        [username, hashedPassword, userSalt, email]
       )
 
       return response.status(201).json({
@@ -26,10 +50,10 @@ export default function postUser(app, path, database) {
     } catch (error) {
       console.log(error)
 
-      // Hantera duplicate username
+      // Hantera duplicate username eller email
       if (error.code === 'ER_DUP_ENTRY') {
         return response.status(409).json({
-          message: "Username already exists."
+          message: "Username or email already exists."
         })
       }
 
