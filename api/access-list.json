@@ -433,6 +433,29 @@
     ]
   },
   {
+    "url": "/deleteposts/:id",
+    "accesses": [
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "DELETE"
+        ],
+        "description": "Delete posts"
+      },
+      {
+        "roles": [
+          "user"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Create a post - logged in users"
+      }
+    ]
+  },
+  {
     "url": "/posts/:id",
     "accesses": [
       {
