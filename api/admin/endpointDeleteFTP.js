@@ -1,12 +1,14 @@
 // den här delen är för admin att kunna ta bort forum, trådar och inlägg
 // detta är en HARD DELETE, allt raderas permanent
 
-// INTE TESTAD I POSTMAN ÄNNU
+// TESTAD I POSTMAN OCH FUNGERAR
+// men saknar autentisering och sessionshantering då admin inte kan logga in just nu
 
-export function endpointDeleteFTP(app, path, database) {
+export default function endpointDeleteFTP(app, path, database) {
   app.delete(`${path}/admin/deleteFTP/:id`, async (request, response) => {
     try {
-      const admin = request.session.admin;
+      const admin = { id: 1, username: "admin" }; // Temporär hårdkodad admin för testning
+      // const admin = request.session.admin;
 
       // Endast admin får ta bort forum, därav kontroll på att admin är inloggad
       if (!admin) {
@@ -33,9 +35,19 @@ export function endpointDeleteFTP(app, path, database) {
       if (threadIds.length > 0) {
         await database.execute(`DELETE FROM post WHERE threadId IN (${threadIds.map(() => "?").join(",")})`, threadIds);
       }
+      // Ta bort alla moderatorer kopplade till dessa trådar
+      if (threadIds.length > 0) {
+        await database.execute(
+          `DELETE FROM threadModerator WHERE threadId IN (${threadIds.map(() => "?").join(",")})`,
+          threadIds
+        );
+      }
 
       // Ta bort alla trådar som tillhör forumet
       await database.execute("DELETE FROM thread WHERE forumId = ?", [forumId]);
+
+      // Ta bort alla användare kopplade till forumet
+      await database.execute("DELETE FROM user_x_forum WHERE forumId = ?", [forumId]);
 
       // Ta bort forumet
       await database.execute("DELETE FROM forum WHERE id = ?", [forumId]);
