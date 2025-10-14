@@ -14,13 +14,10 @@ export default function userByEmail(app, path, database) {
       // Get users from database with LIKE for wildcard search
       const [users] = await database.execute(
         `SELECT 
-          id,
-          username,
-          email,
-          isBlocked
+          *
         FROM user 
         WHERE email LIKE ?`,
-        [`%${email}%`]
+        [email]
       );
 
       // Check if any users found
@@ -30,32 +27,19 @@ export default function userByEmail(app, path, database) {
         });
       }
 
-      // If exact match found, return single user
-      const exactMatch = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (exactMatch) {
-        return response.status(200).json({
-          user: {
-            id: exactMatch.id,
-            username: exactMatch.username,
-            email: exactMatch.email,
-            isBlocked: exactMatch.isBlocked
-          }
-        });
-      }
-
-      // Return all matching users (partial matches)
+      // Return the exact match
+      const user = users[0];
       return response.status(200).json({
-        users: users.map(user => ({
+        user: {
           id: user.id,
           username: user.username,
           email: user.email,
           isBlocked: user.isBlocked
-        })),
-        count: users.length
+        }
       });
 
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return response.status(500).json({
         message: "Server error."
       });

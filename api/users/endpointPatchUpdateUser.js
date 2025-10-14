@@ -1,32 +1,30 @@
-export default function updateUser(app, path, database, hash) {
-  // Update user by ID
+import { generateSalt, hashWithSalt } from '../encryption.js';
+import { validatePasswordSimple, validateUsername } from "../passwordUsernameValidation.js";
+
+export default function updateUser(app, path, database) {
   app.patch(`${path}/users/:id`, async (request, response) => {
     const user = request.session.user;
     const { id } = request.params;
     const { username, email, password } = request.body;
 
-    // Check if user is logged in
     if (!user) {
       return response.status(401).json({
         message: "You must be logged in to update a user."
       });
     }
 
-    // Validate ID parameter
     if (!id || isNaN(id)) {
       return response.status(400).json({
         message: "Valid user ID is required."
       });
     }
 
-    // Check if user is updating their own profile
     if (user.id !== parseInt(id)) {
       return response.status(403).json({
         message: "You can only update your own profile."
       });
     }
 
-    // Check if at least one field is provided
     if (!username && !email && !password) {
       return response.status(400).json({
         message: "At least one field (username, email, or password) must be provided."
@@ -34,7 +32,6 @@ export default function updateUser(app, path, database, hash) {
     }
 
     try {
-      // Check if user exists
       const [users] = await database.execute(
         `SELECT id, isBlocked FROM user WHERE id = ?`,
         [id]
@@ -46,21 +43,28 @@ export default function updateUser(app, path, database, hash) {
         });
       }
 
-      // Check if user is blocked
       if (users[0].isBlocked === 1) {
         return response.status(403).json({
           message: "This user account is blocked."
         });
       }
 
-      // Build dynamic update query
       const updates = [];
       const values = [];
 
       if (username) {
-        // Check if username already exists
+        // Validera användarnamn
+        const usernameCheck = validateUsername(username);
+        if (!usernameCheck.isValid) {
+          return response.status(400).json({
+            message: "Username does not meet requirements.",
+            errors: usernameCheck.errors
+          });
+        }
+
+        // Kolla om username redan finns (case-insensitive)
         const [existingUsername] = await database.execute(
-          `SELECT id FROM user WHERE username = ? AND id != ?`,
+          `SELECT id FROM user WHERE LOWER(username) = LOWER(?) AND id != ?`,
           [username, id]
         );
         if (existingUsername.length > 0) {
@@ -73,7 +77,6 @@ export default function updateUser(app, path, database, hash) {
       }
 
       if (email) {
-        // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
           return response.status(400).json({
@@ -81,7 +84,6 @@ export default function updateUser(app, path, database, hash) {
           });
         }
 
-        // Check if email already exists
         const [existingEmail] = await database.execute(
           `SELECT id FROM user WHERE email = ? AND id != ?`,
           [email, id]
@@ -96,26 +98,30 @@ export default function updateUser(app, path, database, hash) {
       }
 
       if (password) {
-        // Validate password length
-        if (password.length < 6) {
+        // Validera lösenordsstyrka
+        const passwordCheck = validatePasswordSimple(password)
+        if (!passwordCheck.isValid) {
           return response.status(400).json({
-            message: "Password must be at least 6 characters long."
+            message: "Password does not meet requirements.",
+            errors: passwordCheck.errors
           });
         }
-        // Hash password before storing
-        const hashedPassword = hash(password);
+
+        // Generera nytt salt vid lösenordsbyte
+        const newSalt = generateSalt();
+        const hashedPassword = hashWithSalt(password, newSalt);
+
         updates.push('password = ?');
+        updates.push('salt = ?');
         values.push(hashedPassword);
+        values.push(newSalt);
       }
 
-      // Add user ID to values array
       values.push(id);
 
-      // Execute update query
       const query = `UPDATE user SET ${updates.join(', ')} WHERE id = ?`;
       await database.execute(query, values);
 
-      // Get updated user data
       const [updatedUser] = await database.execute(
         `SELECT id, username, email, isBlocked FROM user WHERE id = ?`,
         [id]
