@@ -3,17 +3,18 @@
 // användarens forum, inlägg eller trådar påverkas, men endast att användarnamnet visas som "Deleted User ##"
 
 // INTE TESTAD I POSTMAN
-
-export function softDeleteUserByUorA(app, path, database) {
+export default function softDeleteUserByUorA(app, path, database) {
   app.patch(`${path}/users/softdelete/:id`, async (request, response) => {
     const userIdToDelete = parseInt(request.params.id);
-    const loggedInUser = request.user;
+
+    // Testa båda alternativen så det fungerar oavsett hur sessionen är sparad
+    const loggedInUser = request.session.user || request.session.loggedInUser || request.user;
 
     if (!loggedInUser) {
       return response.status(401).json({ message: 'Unauthorized: You must be logged in.' });
     }
 
-    // Endast admin eller användaren själv kan radera kontot
+    // Endast admin eller användaren själv
     const isAdmin = loggedInUser.role === 'admin';
     const isSelf = loggedInUser.id === userIdToDelete;
 
@@ -24,7 +25,7 @@ export function softDeleteUserByUorA(app, path, database) {
     }
 
     try {
-      // Hämta användaren för att verifiera att den finns
+      // Hämta användaren
       const [users] = await database.execute('SELECT * FROM user WHERE id = ?', [userIdToDelete]);
       if (users.length === 0) {
         return response.status(404).json({ message: 'User not found' });
@@ -32,22 +33,21 @@ export function softDeleteUserByUorA(app, path, database) {
 
       const user = users[0];
 
-      // Skapa unikt “Deleted User ##”-namn för att undvika dubbletter
+      // Skapa unikt namn
       const [deletedCountResult] = await database.execute(
         'SELECT COUNT(*) AS count FROM user WHERE username LIKE "DeletedUser%"'
       );
       const deletedNumber = (deletedCountResult[0].count || 0) + 1;
       const newName = `DeletedUser#${deletedNumber}`;
 
-      // Uppdatera användaren (soft delete)
+      // Soft delete
       await database.execute(
         `UPDATE user 
-         SET username = ?, email = NULL, isBlocked = TRUE 
+         SET username = ?, isBlocked = TRUE 
          WHERE id = ?`,
         [newName, userIdToDelete]
       );
 
-      // Svar till klienten, som bekräftar att det är användaren själv eller admin som raderat kontot
       return response.status(200).json({
         message: isSelf
           ? `Your account has been soft-deleted and replaced with "${newName}".`
