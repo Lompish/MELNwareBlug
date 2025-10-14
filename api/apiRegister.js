@@ -11,6 +11,7 @@ import postForum from "./forums/endpointPostForum.js";
 import deleteForum from "./forums/endpointDeleteForum.js";
 import forumId from "./forums/endpointGetForumId.js";
 import forumSlug from "./forums/endpointSlugForum.js";
+import patchForum from "./forums/endpointPatchUpdateForum.js";
 import threadByTitle from "./threads/endpointGetThreadByTitle.js";
 import deleteThread from "./threads/endpointDeleteThread.js";
 import getUser from "./users/endpointGetUser.js";
@@ -44,6 +45,7 @@ export default function (server, database) {
   deleteForum(server, path, database)
   forumId(server, path, database)
   forumSlug(server, path, database)
+  patchForum(server, path, database)
   patchThread(server, path, database)
   threadByTitle(server, path, database)
   deleteThread(server, path, database)
