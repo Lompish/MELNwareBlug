@@ -21,6 +21,8 @@ import userByUsername from "./users/endpointGetUserByUsername.js";
 import updateUser from './users/endpointPatchUpdateUser.js';
 import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
+import softDeleteUserByU from "./users/endpointSoftDeleteUser.js";
+// import post from "./endpointPosts.js";
 import postPost from "./posts/endpointPostPost.js";
 import patchPost from "./posts/endpontPatchPost.js";
 // import other from "./endpointOthers.js";
@@ -67,6 +69,7 @@ export default function (server, database) {
   userByUsername(server, path, database);
   updateUser(server, path, database, hash);
   postUser(server, path, database);
+  softDeleteUserByU(server, path, database);
   // other(server, acl, path, database)
   postPost(server, path, database)
   getPost(server, path, database)
