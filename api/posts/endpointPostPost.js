@@ -16,9 +16,14 @@ export default function postPost(app, path, database) {
 
     try {
       // Check if thread exists
-      const [threads] = await database.execute(`SELECT id FROM thread WHERE id = ?`, [threadId]);
+      const [threads] = await database.execute(`SELECT id, isBlocked FROM thread WHERE id = ?`, [threadId]);
       if (threads.length === 0) {
         return response.status(404).json({ message: "Thread not found." });
+      }
+
+      // Förhindra att inlägg skapas i blockade trådar
+      if (threads[0].isBlocked === 1) {
+        return response.status(403).json({ message: "This thread is blocked. You cannot post here." });
       }
 
       // Create post
