@@ -115,7 +115,7 @@ export function errorHandler(err, req, res, next) {
   })
 }
 
-// 404 handler
+// 404 hanterare
 export function notFoundHandler(req, res) {
   logger.warn('Route not found', {
     path: req.path,
