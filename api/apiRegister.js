@@ -27,6 +27,15 @@ import patchPost from "./posts/endpontPatchPost.js";
 import getPost from "./posts/endpointGetPost.js";
 import deletePost from "./posts/endpointDeletePost.js";
 import moderatorDeletePost from "./posts/endpointModeratorDeletePost.js";
+import postThreadModerator from "./threads/moderators/endpointPostThreadModerator.js";
+import deleteThreadModerator from "./threads/moderators/endpointDeleteThreadModerator.js";
+import patchThreadOwner from "./threads/moderators/endpointPatchThreadOwner.js";
+import deleteUserPrivateThread from "./threads/moderators/endpointDeleteUserPrivateThread.js";
+import postUserPrivateThread from "./threads/moderators/endpointPostUserPrivateThread.js";
+import patchBlockPost from "./threads/moderators/endpointPatchBlockPost.js";
+import getPostsByThreadId from "./threads/endpointGetPostsByThreadId.js";
+
+
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -64,4 +73,12 @@ export default function (server, database) {
   patchPost(server, path, database)
   deletePost(server, path, database)
   moderatorDeletePost(server, path, database)
+  // post(server, acl, path, database)
+  postThreadModerator(server, path, database)
+  deleteThreadModerator(server, path, database)
+  patchThreadOwner(server, path, database)
+  deleteUserPrivateThread(server, path, database)
+  postUserPrivateThread(server, path, database)
+  patchBlockPost(server, path, database)
+  getPostsByThreadId(server, path, database)
 }
