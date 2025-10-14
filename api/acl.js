@@ -9,7 +9,6 @@ const accessList = JSON.parse(
 )
 // DEBUG: Logga vilka routes som laddas
 console.log("ACL: Loaded", accessList.length, "routes from access-list.json");
-console.log("First route:", accessList[0].url);
 
 // Konverterar en route pattern som "/api/users/:id" till ett regex
 // som matchar faktiska paths som "/api/users/123"

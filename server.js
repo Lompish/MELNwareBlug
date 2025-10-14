@@ -196,7 +196,7 @@ app.use(express.static("./server/dist"))
 
 // Startar servern när vi kör server.js-filen.
 app.listen(port, () => {
-    console.log(`http://localhost:${port}`)
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
-        console.log(`Security features enabled: ACL, Rate Limiting, CSRF, Helmet`)
+    console.log(`Security features enabled: ACL, Rate Limiting, CSRF, Helmet`)
+    console.log(`http://localhost:${port}`)
     })
