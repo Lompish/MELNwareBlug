@@ -5,7 +5,7 @@
 // INTE TESTAD I POSTMAN
 
 export function softDeleteUserByUorA(app, path, database) {
-  app.patch(`${path}/users/:id`, async (request, response) => {
+  app.patch(`${path}/users/softdelete/:id`, async (request, response) => {
     const userIdToDelete = parseInt(request.params.id);
     const loggedInUser = request.user;
 
@@ -34,10 +34,10 @@ export function softDeleteUserByUorA(app, path, database) {
 
       // Skapa unikt “Deleted User ##”-namn för att undvika dubbletter
       const [deletedCountResult] = await database.execute(
-        'SELECT COUNT(*) AS count FROM user WHERE username LIKE "Deleted User%"'
+        'SELECT COUNT(*) AS count FROM user WHERE username LIKE "DeletedUser%"'
       );
       const deletedNumber = (deletedCountResult[0].count || 0) + 1;
-      const newName = `Deleted User #${deletedNumber}`;
+      const newName = `DeletedUser#${deletedNumber}`;
 
       // Uppdatera användaren (soft delete)
       await database.execute(
