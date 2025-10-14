@@ -32,6 +32,18 @@ export default function patchPost(app, path, database) {
 
       const post = posts[0];
 
+      // Kontrollera om tråden är blockad
+      const [threads] = await database.execute(
+        `SELECT isBlocked FROM thread WHERE id = (SELECT threadId FROM post WHERE id = ?)`,
+        [postId]
+      );
+
+      if (threads.length > 0 && threads[0].isBlocked === 1) {
+        return response.status(403).json({
+          message: "This thread is blocked. You cannot edit posts in it."
+        });
+      }
+
       // Kontrollera att användaren är postaren av inlägget
       if (posts[0].userId !== user.id) {
         return response.status(403).json({
