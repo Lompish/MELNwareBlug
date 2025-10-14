@@ -25,8 +25,12 @@ import softDeleteUserByAdmin from "./admin/endpointAdminDeleteUser.js";
 import endpointDeleteFTP from "./admin/endpointDeleteFTP.js";
 import adminLogin from "./admin/endpointAdminLogin.js";
 // import post from "./endpointPosts.js";
+import postPost from "./posts/endpointPostPost.js";
+import patchPost from "./posts/endpontPatchPost.js";
 // import other from "./endpointOthers.js";
-
+import getPost from "./posts/endpointGetPost.js";
+import deletePost from "./posts/endpointDeletePost.js";
+import moderatorDeletePost from "./posts/endpointModeratorDeletePost.js";
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -62,5 +66,9 @@ export default function (server, database) {
   endpointDeleteFTP(server, path, database);
   adminLogin(server, path, database);
   // other(server, acl, path, database)
-  // post(server, acl, path, database)
+  postPost(server, path, database)
+  getPost(server, path, database)
+  patchPost(server, path, database)
+  deletePost(server, path, database)
+  moderatorDeletePost(server, path, database)
 }
