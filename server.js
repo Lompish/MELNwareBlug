@@ -11,7 +11,7 @@ import acl from "./api/acl.js";
 import helmet from "helmet";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
-import csrf from 'csurf';
+// import csrf from 'csurf';
 
 
 // Databas konfiguration.
@@ -140,33 +140,21 @@ app.use(session({
     proxy: process.env.NODE_ENV === 'production'
 }))
 
-// CSRF PROTECTION
-const csrfProtection = csrf({ cookie: true })
+// CSRF PROTECTION - KOMMENTERAD FÖR UTVECKLING
+// const csrfProtection = csrf({ cookie: true })
 
-// Endpoint för att få CSRF token
-app.get('/api/csrf-token', csrfProtection, (req, res) => {
-    res.json({ csrfToken: req.csrfToken() })
-})
+// app.get('/api/csrf-token', csrfProtection, (req, res) => {
+//     res.json({ csrfToken: req.csrfToken() })
+// })
 
 
-// APPLICERA RATE LIMITERS + CSRF
+// APPLICERA RATE LIMITERS
 // Generell limiter på ALLA routes
 app.use('/api', generalLimiter)
 
 // Specifika limiters för olika endpoints
 app.use('/api/login', authLimiter)
 app.use('/api/users', registerLimiter)
-
-// app.use('/api', (req, res, next) => {
-//     if (req.method === 'GET' || 
-//         req.path === '/api/login' || 
-//         req.path === '/api/users' ||
-//         req.path === '/api/health' ||
-//         req.path === '/api/csrf-token') {
-//         return next()
-//     }
-//     csrfProtection(req, res, next)
-// })
 
 // HEALTH CHECK (SERVER)
 app.get('/api/health', (req, res) => {
@@ -188,6 +176,6 @@ app.use(express.static("./server/dist"))
 // Startar servern när vi kör server.js-filen.
 app.listen(port, () => {
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
-    console.log(`Security features enabled: ACL, Rate Limiting, CSRF, Helmet`)
+    console.log(`Security features enabled: ACL, Rate Limiting, Helmet`)
     console.log(`http://localhost:${port}`)
 })
