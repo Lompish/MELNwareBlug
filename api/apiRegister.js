@@ -23,8 +23,12 @@ import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
 import softDeleteUserByU from "./users/endpointSoftDeleteUser.js";
 // import post from "./endpointPosts.js";
+import postPost from "./posts/endpointPostPost.js";
+import patchPost from "./posts/endpontPatchPost.js";
 // import other from "./endpointOthers.js";
-
+import getPost from "./posts/endpointGetPost.js";
+import deletePost from "./posts/endpointDeletePost.js";
+import moderatorDeletePost from "./posts/endpointModeratorDeletePost.js";
 //////import { readFileSync } from "fs"
 
 //////const accessList = JSON.parse(
@@ -58,5 +62,9 @@ export default function (server, database) {
   postUser(server, path, database);
   softDeleteUserByU(server, path, database);
   // other(server, acl, path, database)
-  // post(server, acl, path, database)
+  postPost(server, path, database)
+  getPost(server, path, database)
+  patchPost(server, path, database)
+  deletePost(server, path, database)
+  moderatorDeletePost(server, path, database)
 }
