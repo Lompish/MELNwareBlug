@@ -29,7 +29,7 @@ import patchThreadOwner from "./threads/moderators/endpointPatchThreadOwner.js";
 import deleteUserPrivateThread from "./threads/moderators/endpointDeleteUserPrivateThread.js";
 import postUserPrivateThread from "./threads/moderators/endpointPostUserPrivateThread.js";
 import patchBlockPost from "./threads/moderators/endpointPatchBlockPost.js";
-
+import getPostsByThreadId from "./threads/endpointGetPostsByThreadId.js";
 
 
 //////import { readFileSync } from "fs"
@@ -71,4 +71,5 @@ export default function (server, database) {
   deleteUserPrivateThread(server, path, database)
   postUserPrivateThread(server, path, database)
   patchBlockPost(server, path, database)
+  getPostsByThreadId(server, path, database)
 }
