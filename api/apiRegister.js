@@ -61,5 +61,5 @@ export default function (server, database) {
   getPost(server, path, database)
   patchPost(server, path, database)
   deletePost(server, path, database)
-  moderatorDeletePost(s)
+  moderatorDeletePost(server, path, database)
 }
