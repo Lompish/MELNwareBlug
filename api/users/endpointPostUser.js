@@ -1,5 +1,5 @@
 import { generateSalt, hashWithSalt } from "../encryption.js"
-import { validatePasswordSimple } from "../passwordValidation.js"
+import { validatePasswordSimple, validateUsername } from "../passwordUsernameValidation.js"
 
 export default function postUser(app, path, database) {
   // Lägg till en ny användare (user registration)
@@ -10,6 +10,15 @@ export default function postUser(app, path, database) {
     if (!username || !password || !email) {
       return response.status(400).json({
         message: "Username, password, and email are required."
+      })
+    }
+
+    // Validera användarnamn
+    const usernameCheck = validateUsername(username)
+    if (!usernameCheck.isValid) {
+      return response.status(400).json({
+        message: "Username does not meet requirements.",
+        errors: usernameCheck.errors
       })
     }
 
@@ -31,6 +40,18 @@ export default function postUser(app, path, database) {
     }
 
     try {
+      // Kolla om username eller email redan finns (case-insensitive för username)
+      const [existingUsers] = await database.execute(
+        `SELECT id FROM user WHERE LOWER(username) = LOWER(?) OR email = ?`,
+        [username, email]
+      )
+
+      if (existingUsers.length > 0) {
+        return response.status(409).json({
+          message: "Username or email already exists."
+        })
+      }
+
       // Generera unikt salt för denna användare
       const userSalt = generateSalt()
 
