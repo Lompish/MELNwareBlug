@@ -1,8 +1,8 @@
 // Endpoint för moderatorer och trådägare att ta bort användare från privata trådar
 
 export default function deleteUserPrivateThread(app, path, database) {
-  // DELETE  http://localhost:3000/api/threads/:threadId/private-users/:userId
-  app.delete(`${path}/threads/:threadId/private-users/:userId`, async (request, response) => {
+  // DELETE  http://localhost:3000/api/threads/:threadId/private/:userId
+  app.delete(`${path}/threads/:threadId/private/:userId`, async (request, response) => {
     const user = request.session.user;
     const { threadId, userId } = request.params;
 

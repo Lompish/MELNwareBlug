@@ -1,11 +1,11 @@
 // Endpoint för moderatorer och trådägare att lägga till användare till privata trådar
 
 export default function postUserPrivateThread(app, path, database) {
-  // POST /api/threads/:threadId/private-users
-  app.post(`${path}/threads/:threadId/private-users`, async (request, response) => {
+  // POST http://localhost:3000/api/threads/:threadId/private
+  app.post(`${path}/threads/:threadId/private`, async (request, response) => {
     const user = request.session.user;
     const { threadId } = request.params;
-    const { newUserId } = request.body;
+    const { userId } = request.body;
 
     if (!user) {
       return response.status(401).json({
@@ -13,9 +13,9 @@ export default function postUserPrivateThread(app, path, database) {
       });
     }
 
-    if (!newUserId) {
+    if (!userId) {
       return response.status(400).json({
-        message: "newUserId is required."
+        message: "userId is required."
       });
     }
 
@@ -33,7 +33,7 @@ export default function postUserPrivateThread(app, path, database) {
       const thread = threads[0];
       if (thread.isPrivate === 0) {
         return response.status(403).json({
-          message: "You can only add users to private threads."
+          message: "Only thread owners and moderators can add users to private threads."
         });
       }
 
@@ -52,7 +52,7 @@ export default function postUserPrivateThread(app, path, database) {
       // Kontrollera att användaren finns
       const [users] = await database.execute(
         `SELECT id FROM user WHERE id = ?`,
-        [newUserId]
+        [userId]
       );
 
       if (users.length === 0) {
@@ -64,7 +64,7 @@ export default function postUserPrivateThread(app, path, database) {
       // Kontrollera att användaren inte redan är med
       const [existing] = await database.execute(
         `SELECT * FROM privateThread_x_user WHERE threadId = ? AND userId = ?`,
-        [threadId, newUserId]
+        [threadId, userId]
       );
 
       if (existing.length > 0) {
@@ -76,7 +76,7 @@ export default function postUserPrivateThread(app, path, database) {
       // Lägg till användaren
       await database.execute(
         `INSERT INTO privateThread_x_user (threadId, userId) VALUES (?, ?)`,
-        [threadId, newUserId]
+        [threadId, userId]
       );
 
       return response.status(201).json({
