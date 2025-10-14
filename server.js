@@ -13,7 +13,6 @@ import cors from "cors";
 import cookieParser from 'cookie-parser';
 // import csrf from 'csurf';
 
-
 // Databas konfiguration.
 const database = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -34,11 +33,13 @@ try {
 
 // Skapar ett express-objekt.
 const app = express()
-// Vilken port vi ska lägga servern på.
 const port = 3000
 
-// Säkerhets-middleware
-// HELMET - Säkerhetsheaders
+
+// SÄKERHET
+// 
+
+// HELMET - säkerhetsheaders
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -55,7 +56,7 @@ app.use(helmet({
     }
 }))
 
-// CORS - Kontrollera vilka domäner som får göra requests
+// CORS - tillåt frontenden
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:5173',
     credentials: true,
@@ -63,68 +64,68 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
 }))
 
-// BODY PARSING med storleksbegränsning
-app.use(express.json({
-    limit: '10kb',
-    strict: true
-}))
+// BODY PARSING
+app.use(express.json({ limit: '10kb', strict: true }))
+app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 
-// URL encoded body parsing
-app.use(express.urlencoded({
-    extended: true,
-    limit: '10kb'
-}))
-
-// COOKIE PARSER(för CSRF)
+// COOKIE PARSER (för CSRF)
 app.use(cookieParser())
 
+
 // RATE LIMITERS
+//
+
+// För testning: vi sänker gränser rejält så det triggas snabbt
+// Vanliga produktionsvärden anges i kommentarerna
+
 // Generell limiter för alla API-anrop
 const generalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 200,
+    windowMs: 1 * 60 * 1000, // 1 minut (prod: 15 min)
+    max: 50, // prod: 200
     message: "Too many requests, please try again later.",
     standardHeaders: true,
     legacyHeaders: false,
 })
 
-// STRIKT limiter för autentisering (login)
+// Strikt limiter för autentisering (login)
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 20,
-    message: "Too many login attempts, please try again after 15 minutes.",
+    windowMs: 1 * 60 * 1000, // 1 minut (prod: 15 min)
+    max: 5, // prod: 20
+    message: "Too many login attempts, please try again later.",
     skipSuccessfulRequests: true,
 })
 
 // Limiter för registrering (POST users)
 const registerLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 20,
+    windowMs: 5 * 60 * 1000, // 5 min (prod: 1 h)
+    max: 5, // prod: 20
     message: "Too many accounts created from this IP, please try again later.",
 })
 
-// Limiter för att skapa innehåll (POST threads, forums)
+// Limiter för att skapa innehåll (threads, forums, posts)
 const createContentLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 20,
+    windowMs: 2 * 60 * 1000, // 2 min (prod: 1 h)
+    max: 5, // prod: 20
     message: "Too many posts created, please slow down.",
 })
 
-// Limiter för DELETE operationer
+// Limiter för DELETE-operationer
 const deleteLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 20,
+    windowMs: 2 * 60 * 1000, // 2 min (prod: 15 min)
+    max: 5, // prod: 20
     message: "Too many delete operations, please try again later.",
 })
 
-// Limiter för PATCH/UPDATE operationer
+// Limiter för PATCH/UPDATE-operationer
 const updateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 30,
+    windowMs: 2 * 60 * 1000, // 2 min (prod: 15 min)
+    max: 10, // prod: 30
     message: "Too many update operations, please try again later.",
 })
 
+
 // SESSION
+// 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -140,23 +141,22 @@ app.use(session({
     proxy: process.env.NODE_ENV === 'production'
 }))
 
-// CSRF PROTECTION - KOMMENTERAD FÖR UTVECKLING
-// const csrfProtection = csrf({ cookie: true })
 
-// app.get('/api/csrf-token', csrfProtection, (req, res) => {
-//     res.json({ csrfToken: req.csrfToken() })
-// })
-
-
-// APPLICERA RATE LIMITERS
+// LIMITER APPLICATION (nu används alla!)
+// 
 // Generell limiter på ALLA routes
 app.use('/api', generalLimiter)
 
-// Specifika limiters för olika endpoints
+// Mer specifika limiter beroende på endpoint
 app.use('/api/login', authLimiter)
 app.use('/api/users', registerLimiter)
+app.use('/api/threads', createContentLimiter)
+app.use('/api/forums', createContentLimiter)
+app.use('/api/posts', createContentLimiter)
+app.use('/api/delete', deleteLimiter)
+app.use('/api/update', updateLimiter)
 
-// HEALTH CHECK (SERVER)
+// HEALTH CHECK
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'healthy',
@@ -167,13 +167,13 @@ app.get('/api/health', (req, res) => {
 // ACCESS CONTROL LIST
 app.use('/api', acl)
 
-// Registrerar alla våra endpoints i api-mappen.
+// Registrera alla endpoints
 apiRegister(app, database)
 
-// Gör så att vi kan komma åt filerna i mappen "dist" (vår frontend).
+// Statisk frontend
 app.use(express.static("./server/dist"))
 
-// Startar servern när vi kör server.js-filen.
+// Starta servern
 app.listen(port, () => {
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
     console.log(`Security features enabled: ACL, Rate Limiting, Helmet`)
