@@ -20,6 +20,7 @@ import userByUsername from "./users/endpointGetUserByUsername.js";
 import updateUser from './users/endpointPatchUpdateUser.js';
 import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
+import adminLogin from "./admin/endpointAdminLogin.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
@@ -53,6 +54,7 @@ export default function (server, database) {
   userByUsername(server, path, database);
   updateUser(server, path, database, hash);
   postUser(server, path, database);
+  adminLogin(server, path, database);
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 }
