@@ -1,5 +1,5 @@
 import { generateSalt, hashWithSalt } from '../encryption.js';
-import { validatePasswordSimple } from "../passwordValidation.js"
+import { validatePasswordSimple, validateUsername } from "../passwordUsernameValidation.js";
 
 export default function updateUser(app, path, database) {
   app.patch(`${path}/users/:id`, async (request, response) => {
@@ -53,8 +53,18 @@ export default function updateUser(app, path, database) {
       const values = [];
 
       if (username) {
+        // Validera användarnamn
+        const usernameCheck = validateUsername(username);
+        if (!usernameCheck.isValid) {
+          return response.status(400).json({
+            message: "Username does not meet requirements.",
+            errors: usernameCheck.errors
+          });
+        }
+
+        // Kolla om username redan finns (case-insensitive)
         const [existingUsername] = await database.execute(
-          `SELECT id FROM user WHERE username = ? AND id != ?`,
+          `SELECT id FROM user WHERE LOWER(username) = LOWER(?) AND id != ?`,
           [username, id]
         );
         if (existingUsername.length > 0) {
