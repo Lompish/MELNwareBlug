@@ -28,7 +28,7 @@ export default function forum(app, path, database) {
       res.json(forum);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Serverfel" });
+      res.status(500).json({ error: "Server error" });
     }
   });
 
@@ -42,7 +42,7 @@ export default function forum(app, path, database) {
       res.json(forum);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Serverfel" });
+      res.status(500).json({ error: "Server error" });
     }
   });
 
