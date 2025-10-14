@@ -1,21 +1,21 @@
 export default function threadByTitle(app, path, database) {
-  // Get threads by title
+  // få trådar från titel
   app.get(`${path}/threads/by-title/:title`, async (request, response) => {
     const user = request.session.user;
     const { title } = request.params;
 
-    // Validate title parameter
+    // Validera titel parametrar
     if (!title || title.trim() === '') {
       return response.status(400).json({ message: "Title parameter is required." });
     }
 
     try {
-      // Build query based on user login status
+      // Bygg query baserad på user login status
       let query;
       let params;
 
       if (user) {
-        // Logged in: show public threads + private threads where user is moderator
+        // inloggad: visa publika trådar + privata trådar där user är moderator
         query = `
           SELECT DISTINCT
             t.id,
@@ -33,7 +33,7 @@ export default function threadByTitle(app, path, database) {
           ORDER BY t.creationDate DESC`;
         params = [user.id, `%${title}%`];
       } else {
-        // Not logged in: only show public threads
+        // ej inloggad: visa bara publika trådar
         query = `
           SELECT 
             id,
