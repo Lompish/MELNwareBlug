@@ -12,11 +12,22 @@ export default function deletePost(app, path, database) {
     }
 
     try {
-      // Hämta inlägget och tid
-      const [posts] = await database.execute(
-        `SELECT userId, postDateTime FROM post WHERE id = ?`,
-        [postId]
-      );
+      // Kontrollera att användaren inte är blockerad
+      const [users] = await database.execute(`SELECT isBlocked FROM user WHERE id = ?`, [user.id]);
+      if (users.length && users[0].isBlocked === 1) {
+        return response.status(403).json({
+          message: "Your account is blocked. You can only read content."
+        });
+      }
+
+      // Hämta inlägget och tillhörande tråd + forum
+      const [posts] = await database.execute(`
+        SELECT p.userId, p.postDateTime, t.isBlocked AS threadBlocked, f.isBlocked AS forumBlocked
+        FROM post p
+        INNER JOIN thread t ON t.id = p.threadId
+        INNER JOIN forum f ON f.id = t.forumId
+        WHERE p.id = ?
+      `, [postId]);
 
       // Kontrollera att inlägget finns
       if (posts.length === 0) {
@@ -24,6 +35,13 @@ export default function deletePost(app, path, database) {
       }
 
       const post = posts[0];
+
+      // Tillåt inte radering om tråden eller forumet är blockerat
+      if (post.threadBlocked === 1 || post.forumBlocked === 1) {
+        return response.status(403).json({
+          message: "This thread or forum is blocked. You cannot delete posts in it."
+        });
+      }
 
       // Kontrollera att användaren äger inlägget
       if (post.userId !== user.id) {
