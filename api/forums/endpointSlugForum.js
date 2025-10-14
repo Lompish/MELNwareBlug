@@ -10,7 +10,7 @@ function createSlug(name) {
 }
 
 
-export default function forum(app, path, database) {
+export default function forumSlug(app, path, database) {
   // Statisk forumlista (senare kan man hämta från DB)
   const forums = [
     { id: 1, name: "Sport", amount_of_threads: 2 },
@@ -42,7 +42,7 @@ export default function forum(app, path, database) {
     res.json(forum);
   });
 
-  
+
   app.get(`${path}/forums/:id`, (req, res) => {
     const id = parseInt(req.params.id);
     const forum = forums.find(f => f.id === id);
