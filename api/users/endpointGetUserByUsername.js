@@ -1,9 +1,9 @@
 export default function userByUsername(app, path, database) {
-  // Get user by username (with wildcard support)
+  // Get user från username (with wildcard support)
   app.get(`${path}/users/by-username/:username`, async (request, response) => {
     const { username } = request.params;
 
-    // Validate username parameter
+    // Validera username parametrar
     if (!username || username.trim() === '') {
       return response.status(400).json({
         message: "Username parameter is required."
@@ -11,7 +11,7 @@ export default function userByUsername(app, path, database) {
     }
 
     try {
-      // Get users from database with LIKE for wildcard search
+      // hämta users från databas med LIKE för wildcard search
       const [users] = await database.execute(
         `SELECT 
           id,
@@ -23,14 +23,14 @@ export default function userByUsername(app, path, database) {
         [`%${username}%`]
       );
 
-      // Check if any users found
+      // kolla om någon user hittas
       if (users.length === 0) {
         return response.status(404).json({
           message: "No users found matching that username."
         });
       }
 
-      // If exact match found, return single user
+      // om exakt user match hittas, returnera endast den user
       const exactMatch = users.find(u => u.username.toLowerCase() === username.toLowerCase());
       if (exactMatch) {
         return response.status(200).json({
@@ -43,7 +43,7 @@ export default function userByUsername(app, path, database) {
         });
       }
 
-      // Return all matching users (partial matches)
+      // Returnera alla matchande users (partial matches)
       return response.status(200).json({
         users: users.map(user => ({
           id: user.id,

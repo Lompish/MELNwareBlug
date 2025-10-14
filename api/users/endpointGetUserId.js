@@ -1,9 +1,9 @@
 export default function userId(app, path, database) {
-  // Get user by ID
+  // Get user av ID
   app.get(`${path}/users/:id`, async (request, response) => {
     const { id } = request.params;
 
-    // Validate ID parameter
+    // Validera ID parametrar
     if (!id || isNaN(id)) {
       return response.status(400).json({
         message: "Valid user ID is required."
@@ -11,7 +11,7 @@ export default function userId(app, path, database) {
     }
 
     try {
-      // Get user from database
+      // Get user från databas
       const [users] = await database.execute(
         `SELECT 
           id,
@@ -23,7 +23,7 @@ export default function userId(app, path, database) {
         [id]
       );
 
-      // Check if user exists
+      // kolla om user exsisterar
       if (users.length === 0) {
         return response.status(404).json({
           message: "User not found."
@@ -32,7 +32,7 @@ export default function userId(app, path, database) {
 
       const user = users[0];
 
-      // Return user data (without sensitive info like password)
+      // Returnera användardata (utan känslig information som lösenord)
       return response.status(200).json({
         user: {
           id: user.id,

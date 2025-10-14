@@ -1,9 +1,9 @@
 export default function userByEmail(app, path, database) {
-  // Get user by email (with wildcard support)
+  // Get user från email (with wildcard support)
   app.get(`${path}/users/by-email/:email`, async (request, response) => {
     const { email } = request.params;
 
-    // Validate email parameter
+    // Validera email parametrar
     if (!email || email.trim() === '') {
       return response.status(400).json({
         message: "Email parameter is required."
@@ -11,7 +11,7 @@ export default function userByEmail(app, path, database) {
     }
 
     try {
-      // Get users from database with LIKE for wildcard search
+      //Hämta användare från databasen med LIKE för wildcard-sökning
       const [users] = await database.execute(
         `SELECT 
           *
@@ -20,14 +20,14 @@ export default function userByEmail(app, path, database) {
         [email]
       );
 
-      // Check if any users found
+      // kolla om någon user hittas
       if (users.length === 0) {
         return response.status(404).json({
           message: "No users found matching that email."
         });
       }
 
-      // Return the exact match
+      // Returera exakt match
       const user = users[0];
       return response.status(200).json({
         user: {
