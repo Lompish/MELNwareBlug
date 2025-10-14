@@ -23,6 +23,7 @@ import hash from "./encryption.js";
 import postUser from "./users/endpointPostUser.js";
 import softDeleteUserByAdmin from "./admin/endpointAdminDeleteUser.js";
 import endpointDeleteFTP from "./admin/endpointDeleteFTP.js";
+import adminLogin from "./admin/endpointAdminLogin.js";
 // import post from "./endpointPosts.js";
 // import other from "./endpointOthers.js";
 
@@ -59,6 +60,7 @@ export default function (server, database) {
   postUser(server, path, database);
   softDeleteUserByAdmin(server, path, database);
   endpointDeleteFTP(server, path, database);
+  adminLogin(server, path, database);
   // other(server, acl, path, database)
   // post(server, acl, path, database)
 }
