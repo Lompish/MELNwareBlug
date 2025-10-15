@@ -102,11 +102,29 @@ const registerLimiter = rateLimit({
     message: "Too many accounts created from this IP, please try again later.",
 })
 
-// Limiter för att skapa innehåll (threads, forums, posts)
-const createContentLimiter = rateLimit({
-    windowMs: 2 * 60 * 1000, // 2 min (prod: 1 h)
-    max: 5, // prod: 20
+// Unika limiters för att skapa innehåll (förhindrar att GET påverkas)
+const createForumLimiter = rateLimit({
+    windowMs: 2 * 60 * 1000,
+    max: 5,
+    message: "Too many forums created, please slow down.",
+})
+
+const createThreadLimiter = rateLimit({
+    windowMs: 2 * 60 * 1000,
+    max: 5,
+    message: "Too many threads created, please slow down.",
+})
+
+const createPostLimiter = rateLimit({
+    windowMs: 2 * 60 * 1000,
+    max: 5,
     message: "Too many posts created, please slow down.",
+})
+
+const createModeratorLimiter = rateLimit({
+    windowMs: 2 * 60 * 1000,
+    max: 5,
+    message: "Too many moderators added, please slow down.",
 })
 
 // Limiter för DELETE-operationer
@@ -150,11 +168,26 @@ app.use('/api', generalLimiter)
 // Mer specifika limiter beroende på endpoint
 app.use('/api/login', authLimiter)
 app.use('/api/users', registerLimiter)
-app.use('/api/threads', createContentLimiter)
-app.use('/api/forums', createContentLimiter)
-app.use('/api/posts', createContentLimiter)
-app.use('/api/delete', deleteLimiter)
-app.use('/api/update', updateLimiter)
+
+// Skapa innehåll – nu med separata instanser
+app.post('/api/forums', createForumLimiter)
+app.post('/api/threads', createThreadLimiter)
+app.post('/api/posts', createPostLimiter)
+app.post('/api/threads/:threadId/moderators', createModeratorLimiter)
+
+// Delete operationer
+app.delete('/api/forums/:id', deleteLimiter)
+app.delete('/api/threads/:id', deleteLimiter)
+app.delete('/api/threads/:forumId/:threadId', deleteLimiter)
+app.delete('/api/posts/:id', deleteLimiter)
+app.delete('/api/threads/:threadId/moderators/:userId', deleteLimiter)
+
+// Update operationer
+app.patch('/api/threads/:id', updateLimiter)
+app.patch('/api/users/:id', updateLimiter)
+app.patch('/api/forums/:id', updateLimiter)
+app.patch('/api/posts/:id', updateLimiter)
+app.patch('/api/threads/:threadId/transfer-ownership', updateLimiter)
 
 // HEALTH CHECK
 app.get('/api/health', (req, res) => {
