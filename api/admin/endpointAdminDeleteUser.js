@@ -1,6 +1,6 @@
 // Den här koden gör en "soft delete" av en användare i user-tabellen i databasen
 // Endast (fejk)admin kan radera konton i denna version
-// Användarens forum, trådar och inlägg påverkas inte – endast användarnamnet ändras till "DeletedUser_timestamp"
+// Användarens forum, trådar och inlägg påverkas inte – endast användarnamnet och email ändras
 
 export default function softDeleteUserByAdmin(app, path, database) {
   app.patch(`${path}/admin/softdelete/:id`, async (request, response) => {
@@ -37,15 +37,17 @@ export default function softDeleteUserByAdmin(app, path, database) {
 
       const user = users[0];
 
-      // Skapa nytt unikt namn med timestamp - garanterat unikt!
-      const newName = `DeletedUser_${Date.now()}`;
+      // Skapa nytt unikt namn och email med timestamp - garanterat unikt!
+      const timestamp = Date.now();
+      const newName = `DeletedUser_${timestamp}`;
+      const newEmail = `deleteduser_${timestamp}@deleted.local`;
 
       // Utför soft delete i databasen
       await database.execute(
         `UPDATE user 
-         SET username = ?, isBlocked = TRUE 
+         SET username = ?, email = ?, isBlocked = TRUE 
          WHERE id = ?`,
-        [newName, userIdToDelete]
+        [newName, newEmail, userIdToDelete]
       );
 
       // Svar till klient om lyckad radering
@@ -53,6 +55,9 @@ export default function softDeleteUserByAdmin(app, path, database) {
         message: `User "${user.username}" has been soft-deleted and replaced with "${newName}" by admin.`,
         deletedBy: fakeAdmin.username,
         newUsername: newName,
+        newEmail: newEmail,
+        originalUsername: user.username,
+        originalEmail: user.email
       });
 
     } catch (error) {
