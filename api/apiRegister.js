@@ -41,6 +41,7 @@ import postUserPrivateThread from "./threads/moderators/endpointPostUserPrivateT
 import patchBlockPost from "./threads/moderators/endpointPatchBlockPost.js";
 import getPostsByThreadId from "./threads/endpointGetPostsByThreadId.js";
 import deletePostByModerator from "./threads/moderators/endpointDeletePosts.js";
+import getTerms from "./terms/endpointGetTerms.js";
 
 
 //////import { readFileSync } from "fs"
@@ -94,4 +95,5 @@ export default function (server, database) {
   getPostsByThreadId(server, path, database)
   adminLogout(server, path, database)
   deletePostByModerator(server, path, database)
+  getTerms(server, path, database)
 }

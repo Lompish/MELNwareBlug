@@ -480,6 +480,43 @@
     ]
   },
   {
+    "url": "/terms",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get all Terms & Conditions versions - public access"
+      },
+      {
+        "roles": [
+          "admin"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "description": "Add new Terms & Conditions version - admin only"
+      }
+    ]
+  },
+  {
+    "url": "/terms/active",
+    "accesses": [
+      {
+        "roles": [
+          "*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "description": "Get currently active Terms & Conditions version - public access"
+      }
+    ]
+  },
+  {
     "url": "/csrf-token",
     "accesses": [
       {
